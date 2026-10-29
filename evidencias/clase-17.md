@@ -175,6 +175,149 @@ Mientras no tengamos la consigna formal de la Tarea 5, lo que ya se puede antici
   - El índice único `(userId, mes, anio)` significa que renombrar/renumerar meses rompería datos existentes.
   - Si se toca `fetch` o el token en una página, es fácil olvidar otra: no hay un cliente HTTP centralizado.
 
+## Impacto · Tarea 5 (Presupuesto por categoría)
+
+**Consigna**: crear un presupuesto mensual **por categoría** y mostrar cuánto se consumió. Debe persistir después de recargar o volver a entrar.
+
+### Estado actual (lo que ya existe)
+
+- Las **categorías** no son una tabla: son un **string** dentro de cada gasto (`Gasto.categoria`, `DataTypes.STRING`, default `'otros'`, [backend/src/models/Gasto.js:36-40](../backend/src/models/Gasto.js#L36-L40)). El frontend ofrece 4 valores fijos en un `<select>`: `otros`, `comida`, `transporte`, `estudio` ([frontend/src/pages/Gastos.tsx:300-305](../frontend/src/pages/Gastos.tsx#L300-L305)). El controlador normaliza a minúsculas y `.trim()` al registrar y editar ([backend/src/controllers/gastoController.js:89](../backend/src/controllers/gastoController.js#L89), [:239](../backend/src/controllers/gastoController.js#L239)).
+- El **presupuesto actual** es solo mensual: tabla `Presupuestos` con `(userId, mes, anio, limite)`, único por `(userId, mes, anio)` ([backend/src/models/Presupuesto.js](../backend/src/models/Presupuesto.js)).
+- El **Dashboard** muestra Límite / Total gastado / Saldo disponible del mes y permite crear o actualizar el límite mensual ([frontend/src/pages/Dashboard.tsx:204-253](../frontend/src/pages/Dashboard.tsx#L204-L253)).
+
+### Interfaz
+
+- Dónde: en el mismo **Dashboard.tsx**, **debajo** de la sección "Presupuesto mensual" existente, agregar una sección "Presupuesto por categoría" con el mismo estilo plano (sin CSS nuevo, sin librería de UI).
+- Qué muestra: por cada categoría conocida (las 4 fijas: `otros`, `comida`, `transporte`, `estudio`), una fila con **Categoría · Límite · Consumido · Restante**. Si la categoría no tiene presupuesto, se muestra "—" en Límite/Restante y solo el Consumido real.
+- Formulario chico (al final de la sección): un `<select>` de categoría (los mismos 4 valores) + input de monto (`type="number"`, `min="0.01"`, `step="0.01"`) + botón **Guardar**. Al enviar, hace `POST /api/presupuesto-categoria/establecer`.
+- Mensajes: usa los mismos `<p role="status">` / `<p role="alert">` que ya usa el Dashboard para éxito/error.
+
+### Lógica
+
+Reglas, siguiendo el mismo patrón de `establecerPresupuesto` ([backend/src/controllers/presupuestoController.js:5-81](../backend/src/controllers/presupuestoController.js#L5-L81)):
+
+1. `limite` debe ser finito y mayor a 0.
+2. `categoria` requerida (string no vacío); se normaliza a minúsculas y `.trim()` antes de guardar.
+3. `categoria` **debe ser una de las 4 fijas**: `otros`, `comida`, `transporte`, `estudio` (las mismas del `<select>` en [frontend/src/pages/Gastos.tsx:300-305](../frontend/src/pages/Gastos.tsx#L300-L305)). Si no está en la lista → `400`. La lista queda como constante en el controlador (`const CATEGORIAS_VALIDAS = ['otros', 'comida', 'transporte', 'estudio']`) para que cualquier cambio futuro sea un solo lugar.
+4. `mes` entero 1-12; `anio` entero ≥ 2000.
+5. El `limite` **no puede ser menor** que lo ya **consumido en esa categoría** durante ese mes (sumatoria de `Gasto.monto` con `userId = req.user.id`, `categoria = X`, `fecha ∈ [inicioMes, inicioMesSiguiente)`).
+6. Si ya existe un registro para `(userId, categoria, mes, anio)` → actualiza con `.save()`; si no → `.create()`.
+7. **Consumido** = `SUM(Gasto.monto)` filtrado por `userId`, `categoria` y rango mensual, usando `Op.gte` / `Op.lt` como ya se hace para el mensual.
+
+**Decisión sobre la suma de límites por categoría vs. límite mensual** (lo que pide la consigna):
+
+- **Recomendación**: *permitir* que la suma de los límites por categoría pueda **superar** el límite mensual general, **sin** validación cruzada que lo bloquee.
+- **Por qué se permite**:
+  1. **El bloqueo real sigue siendo el mensual**. El control que impide gastar de más ya existe en `registrarGasto` ([backend/src/controllers/gastoController.js:68-80](../backend/src/controllers/gastoController.js#L68-L80)): si el gasto hace que el total del mes supere el límite mensual, lo rechaza con `400`. El presupuesto por categoría es *informativo* (ver cuánto se consumió en cada rubro), no un segundo portón que haya que cruzar. Entonces no hace falta que la suma por categoría se pegue al mensual: con que el gasto no supere el mensual alcanza.
+  2. **Simplicidad del controlador**. Cada endpoint hace una sola validación de dominio, igual que `establecerPresupuesto`. Agregar validación cruzada rompe ese patrón.
+  3. **Evita cascadas**. Si forzáramos `sum(límites_categoría) ≤ límite_mensual`, bajar el mensual podría volver inválidos varios por-categoría ya guardados, y habría que elegir cuál ajustar (o rechazar la bajada del mensual). Más código, más fricción y más tests para una regla que no agrega poder real.
+- **Alternativa estricta** (si el docente la prefiere): el POST a `/api/presupuesto-categoria/establecer` devolvería `400` cuando `sum(limites_otras_categorias_del_mes) + nuevo_limite > limite_mensual_del_mes`. Haría falta además revisar qué pasa cuando no existe presupuesto mensual (¿se bloquea el por-categoría también?) y una validación cruzada inversa en `establecerPresupuesto` para evitar bajar el mensual por debajo de la suma de categorías. Queda documentado por si lo piden.
+
+**No se toca** `registrarGasto` ni el presupuesto mensual: la nueva relación es *aditiva*. Esto evita romper los 20 tests que ya pasan.
+
+### Datos
+
+Nueva relación (mismo ORM, Sequelize, mismo estilo que `Presupuesto.js`):
+
+- Archivo nuevo: `backend/src/models/PresupuestoCategoria.js`.
+- Columnas:
+  - `id` INTEGER autoIncrement primaryKey
+  - `userId` INTEGER notNull
+  - `categoria` STRING notNull
+  - `mes` INTEGER notNull, validate `min: 1, max: 12`
+  - `anio` INTEGER notNull, validate `min: 2000`
+  - `limite` DECIMAL(10,2) notNull, validate `min: 0.01`
+- Índice único: `['userId', 'categoria', 'mes', 'anio']` (misma forma del índice único de `Presupuesto.js:37-42`).
+- La creación de la tabla la hace automáticamente `sequelize.sync({ alter: true })` en [backend/server.js:14](../backend/server.js#L14) la próxima vez que arranque el backend (igual que `Presupuestos` hoy). Hay que registrar el modelo haciendo `require` en `app.js` o `server.js` para que Sequelize lo conozca al momento del `sync`.
+- **Consumido** = `Gasto.findAll({ where: { userId, categoria, fecha: [inicioMes, inicioMesSiguiente) } }).reduce(... monto)`. Mismo cálculo y mismo rango que el mensual, solo que con un filtro extra por `categoria`.
+
+### Pruebas
+
+Mismo runner que ya existe: **Jest** con mocks de los modelos (`jest.mock('../src/models/...')`), siguiendo el estilo de [backend/tests/presupuestoController.test.js](../backend/tests/presupuestoController.test.js). Nuevo archivo: `backend/tests/presupuestoCategoriaController.test.js`.
+
+Casos a cubrir (7):
+
+1. **Válido**: `(limite: 300, categoria: 'comida', mes: 11, anio: 2026)` con `Gasto.findAll` mockeado a `[{ monto: 50 }]` → `201` + "Presupuesto por categoría establecido correctamente".
+2. **Inválido (limite ≤ 0 o faltan datos numéricos)** → `400` "Debes proporcionar una categoría, un límite positivo, un mes válido y un año válido".
+3. **Categoría fuera de la lista fija**: `(categoria: 'viajes')` → `400` "La categoría debe ser una de: otros, comida, transporte, estudio". `Presupuesto.create` **no** debe llamarse.
+4. **Menor a lo ya consumido**: `limite: 100` con gastos de esa categoría por `200` → `400` "El límite no puede ser menor que lo que ya has gastado en esa categoría".
+5. **Cálculo del consumido en GET**: `obtenerPresupuestoCategoria(mes, anio, categoria)` con `Gasto.findAll` mockeado → responde `{ presupuesto, consumido, restante }` correctos.
+6. **Aislamiento por usuario**: verificar que el `where` de `findOne`/`findAll` incluye `userId = req.user.id` (otro usuario con los mismos `(categoria, mes, anio)` no debe ver el registro).
+7. **Upsert**: segunda llamada con mismo `(userId, categoria, mes, anio)` llama a `.save()` y no crea un segundo registro.
+
+Correrlas con `cd backend && npm test`.
+
+### Contrato de las rutas nuevas (para dividir el trabajo)
+
+Mismo estilo de nombres y shape de respuesta que `/api/presupuesto/establecer` y `/api/presupuesto/obtener`. Ambas rutas requieren `authMiddleware` (header `Authorization: Bearer <token>`). Prefijo: **`/api/presupuesto-categoria`** (archivo nuevo `backend/src/routes/presupuestoCategoriaRoutes.js`, montado en `app.js` como `app.use('/api/presupuesto-categoria', presupuestoCategoriaRoutes)`).
+
+#### 1) `POST /api/presupuesto-categoria/establecer`
+
+Crea o actualiza (upsert por `(userId, categoria, mes, anio)`).
+
+- **Headers**: `Authorization: Bearer <token>`, `Content-Type: application/json`
+- **Body**:
+  ```json
+  { "categoria": "comida", "limite": 300, "mes": 11, "anio": 2026 }
+  ```
+- **Respuesta OK**:
+  - `201 Created` cuando crea:
+    ```json
+    {
+      "message": "Presupuesto por categoría establecido correctamente",
+      "presupuesto": { "id": 1, "userId": 1, "categoria": "comida", "mes": 11, "anio": 2026, "limite": 300 }
+    }
+    ```
+  - `200 OK` cuando actualiza:
+    ```json
+    {
+      "message": "Presupuesto por categoría actualizado correctamente",
+      "presupuesto": { "id": 1, "userId": 1, "categoria": "comida", "mes": 11, "anio": 2026, "limite": 350 }
+    }
+    ```
+- **Errores**:
+  - `400` `{ "error": "Debes proporcionar una categoría, un límite positivo, un mes válido y un año válido" }` (datos faltantes o fuera de rango).
+  - `400` `{ "error": "La categoría debe ser una de: otros, comida, transporte, estudio" }` (categoría no está en la lista fija).
+  - `400` `{ "error": "El límite no puede ser menor que lo que ya has gastado en esa categoría" }`.
+  - `401` / `403` si el token falta o es inválido (lo pone `authMiddleware`).
+  - `500` `{ "error": "Error al establecer el presupuesto por categoría" }`.
+
+#### 2) `GET /api/presupuesto-categoria/obtener?mes=M&anio=A`
+
+Devuelve el **listado** por las 4 categorías fijas con límite / consumido / restante del usuario del token.
+
+- **Headers**: `Authorization: Bearer <token>`
+- **Query**: `?mes=11&anio=2026`
+- **Respuesta OK (`200`)**:
+  ```json
+  {
+    "mes": 11,
+    "anio": 2026,
+    "categorias": [
+      { "categoria": "otros",      "limite": null, "consumido": 0,   "restante": null },
+      { "categoria": "comida",     "limite": 300,  "consumido": 120, "restante": 180 },
+      { "categoria": "transporte", "limite": 150,  "consumido": 50,  "restante": 100 },
+      { "categoria": "estudio",    "limite": null, "consumido": 40,  "restante": null }
+    ]
+  }
+  ```
+  - `limite` y `restante` son `null` cuando no hay presupuesto definido para esa categoría (el frontend muestra "—").
+  - `consumido` siempre viene (puede ser `0`), con 2 decimales.
+- **Errores**:
+  - `400` `{ "error": "Debes indicar un mes y un año válidos" }`.
+  - `401` / `403` si el token falta o es inválido.
+  - `500` `{ "error": "Error al consultar los presupuestos por categoría" }`.
+
+> El GET devuelve **siempre** las 4 categorías aunque no haya ningún registro guardado: así el frontend no tiene que hacer merge en el cliente ni manejar casos "vacíos" distintos.
+
+### Riesgos
+
+- **`sync({ alter: true })` real** ([backend/server.js:14](../backend/server.js#L14)): al agregar un modelo nuevo, Sequelize creará la tabla al próximo arranque. En desarrollo es cómodo; si la base está compartida hay que avisar al equipo. No afecta a `Gastos` ni a `Presupuestos` existentes.
+- **Categoría como string libre**: hoy el controlador de gastos la normaliza a minúsculas, pero `editarGasto` acepta cualquier string. Si alguien registra un gasto con `categoria: 'Comidas'` (plural o con mayúscula), no coincidirá con el presupuesto `'comida'` y quedará como "sin presupuesto". Mitigación: normalizar a minúsculas también en el nuevo controlador y usar la **misma lista fija** de 4 categorías en el `<select>` del Dashboard (mantiene el estilo del proyecto, no hace falta tabla `Categorías`).
+- **Doble regla de bloqueo**: hoy `registrarGasto` solo bloquea contra el presupuesto *mensual*. No se cambia en esta tarea: el presupuesto por categoría es solo *informativo* en la UI. Riesgo: un usuario puede gastar más que su límite por categoría sin aviso del backend. Si el docente lo pide, se puede sumar en una iteración posterior (y haría falta un test nuevo que no rompa a los existentes).
+- **Hardcode de la URL**: igual que el resto del proyecto, el nuevo `fetch` del Dashboard apuntará directo a `http://localhost:4000`. Es consistente con el método del grupo anterior.
+- **Suma de límites > mensual**: documentado arriba. Si el docente lo rechaza, se agrega la validación cruzada y un test más.
+
 ## Modalidad del análisis
 
 Proyecto original hecho **sin IA** (grupo anterior). Este análisis se hizo con apoyo de IA (Claude Code), con verificación nuestra en los archivos reales del repo.
