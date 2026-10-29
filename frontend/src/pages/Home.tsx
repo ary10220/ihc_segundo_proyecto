@@ -3,7 +3,7 @@ function Home() {
     return (
         <div>
 
-            <h1>Bienvenido a TruequeU</h1>
+            <h1>Bienvenido a Presupuesto Estudiantil</h1>
 
             <p>Esta es una ruta pública.</p>
 

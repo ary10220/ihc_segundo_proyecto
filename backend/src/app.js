@@ -14,7 +14,7 @@ app.use('/api/gastos', gastosRoutes);
 app.use('/api/presupuesto', presupuestoRoutes);
 app.use('/api/presupuesto-categoria', presupuestoCategoriaRoutes);
 app.get('/', (req, res) => {
-    res.json({ message: 'Bienvenido a la API de TruequeU' })
+    res.json({ message: 'Bienvenido a la API de Presupuesto Estudiantil' })
 });
 
 module.exports = app;
