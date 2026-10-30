@@ -1,0 +1,28 @@
+{
+  "name": "ihc_segundo_proyecto",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "install:e2e:browser": "node e2e/run-playwright.mjs install chromium",
+    "test:e2e": "node e2e/run-playwright.mjs test",
+    "test:e2e:headed": "node e2e/run-playwright.mjs test --headed"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.16.1",
+      "onFail": "download"
+    }
+  },
+  "packageManager": "pnpm@12.16.1",
+  "type": "module",
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^26.6.6"
+  }
+}
