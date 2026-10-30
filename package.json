@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "seed": "npm --prefix backend run seed",
+    "test:e2e": "playwright test",
+    "test:e2e:report": "playwright show-report"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

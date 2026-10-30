@@ -280,6 +280,7 @@ function Gastos() {
 
             <input
                 type="number"
+                aria-label="Monto"
                 placeholder="Monto"
                 value={monto}
                 onChange={(e) => setMonto(e.target.value)}
@@ -287,17 +288,18 @@ function Gastos() {
 
             <input
                 type="text"
+                aria-label="Motivo"
                 placeholder="Motivo"
                 value={motivo}
                 onChange={(e) => setMotivo(e.target.value)}
             />
 
-            <select value={tipo} onChange={(e) => setTipo(e.target.value)}>
+            <select aria-label="Tipo" value={tipo} onChange={(e) => setTipo(e.target.value)}>
                 <option value="gasto">Gasto</option>
                 <option value="ingreso">Ingreso</option>
             </select>
 
-            <select value={categoria} onChange={(e) => setCategoria(e.target.value)}>
+            <select aria-label="Categoría" value={categoria} onChange={(e) => setCategoria(e.target.value)}>
                 <option value="otros">Otros</option>
                 <option value="comida">Comida</option>
                 <option value="transporte">Transporte</option>
