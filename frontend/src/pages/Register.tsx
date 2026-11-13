@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { guardarToken } from '../utils/auth';
 
 function Register() {
 
@@ -45,7 +46,8 @@ function Register() {
 
                 console.log('Token:', data.token);
 
-                localStorage.setItem('token', data.token);
+                // Clase 22 - al registrarse el token va solo a sessionStorage (no persiste).
+                guardarToken(data.token, false);
 
                 navigate('/dashboard');
 

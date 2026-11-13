@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { obtenerToken } from '../utils/auth';
 
 interface Gasto {
 
@@ -30,7 +31,7 @@ function Pagos() {
     const [gastos, setGastos] = useState<Gasto[]>([]);
     const [saldoDisponible, setSaldoDisponible] = useState<number | null>(null);
 
-    const token = localStorage.getItem('token');
+    const token = obtenerToken();
 
     const obtenerPresupuesto = async () => {
         try {

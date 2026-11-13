@@ -1,9 +1,10 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import { obtenerToken } from '../utils/auth';
 
 function ProtectedRoute() {
 
-    const token = localStorage.getItem('token');
+    const token = obtenerToken();
 
     if (!token) {
 

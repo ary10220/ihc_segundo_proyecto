@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 import { track, type Motivo } from '../utils/analitica';
+import { obtenerToken, limpiarToken } from '../utils/auth';
 
 // Motivo de rechazo de la lista fija (nunca el texto del backend).
 const motivoMeta = (error: string | undefined): Motivo =>
@@ -45,7 +46,7 @@ const etiquetaTipo: Record<Movimiento['tipo'], string> = {
 
 function Metas() {
     const navigate = useNavigate();
-    const token = localStorage.getItem('token');
+    const token = obtenerToken();
     const [resumen, setResumen] = useState<Resumen | null>(null);
     const [mensaje, setMensaje] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null);
 
@@ -63,7 +64,7 @@ function Metas() {
         if (!token) return navigate('/login');
         const r = await fetch(API, { headers: { Authorization: `Bearer ${token}` } });
         if (r.status === 401 || r.status === 403) {
-            localStorage.removeItem('token');
+            limpiarToken();
             return navigate('/login');
         }
         if (r.ok) setResumen(await r.json());

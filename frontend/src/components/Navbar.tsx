@@ -1,10 +1,11 @@
 import { NavLink, useNavigate } from 'react-router-dom';
+import { limpiarToken } from '../utils/auth';
 
 function Navbar() {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        localStorage.removeItem('token');
+        limpiarToken();
         navigate('/login');
     };
 

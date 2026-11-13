@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { track, type Motivo } from '../utils/analitica';
+import { obtenerToken } from '../utils/auth';
 
 // Traduce el error del backend a un motivo de la lista fija (sin guardar el texto).
 function motivoDesdeError(error: string | undefined): Motivo {
@@ -56,7 +57,7 @@ function Gastos() {
     // Tarea 9 - Analitica: no repetir busqueda_sin_resultados por cada tecla.
     const ultimaBusquedaVacia = useRef('');
 
-    const token = localStorage.getItem('token');
+    const token = obtenerToken();
 
     const obtenerGastos = async () => {
 

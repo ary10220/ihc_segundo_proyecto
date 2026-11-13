@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 import { track } from '../utils/analitica';
+import { obtenerToken, limpiarToken } from '../utils/auth';
 
 interface User {
     id: number;
@@ -129,7 +130,7 @@ function Dashboard() {
     const anio = ahora.getFullYear();
 
     const cargarPresupuesto = async () => {
-        const token = localStorage.getItem('token');
+        const token = obtenerToken();
 
         if (!token) {
             navigate('/login');
@@ -164,7 +165,7 @@ function Dashboard() {
     };
 
     const cargarPresupuestoCategoria = async () => {
-        const token = localStorage.getItem('token');
+        const token = obtenerToken();
 
         if (!token) {
             return;
@@ -202,7 +203,7 @@ function Dashboard() {
     };
 
     const cargarGastosRecurrentes = async () => {
-        const token = localStorage.getItem('token');
+        const token = obtenerToken();
         if (!token) return;
 
         try {
@@ -224,7 +225,7 @@ function Dashboard() {
 
     useEffect(() => {
         const getUser = async () => {
-            const token = localStorage.getItem('token');
+            const token = obtenerToken();
 
             if (!token) {
                 navigate('/login');
@@ -248,7 +249,7 @@ function Dashboard() {
                     setUser(data);
                 } else {
                     console.log(data.error);
-                    localStorage.removeItem('token');
+                    limpiarToken();
                     navigate('/login');
                     return;
                 }
@@ -298,7 +299,7 @@ function Dashboard() {
             if (!confirmar) return;
         }
 
-        const token = localStorage.getItem('token');
+        const token = obtenerToken();
 
         if (!token) {
             navigate('/login');
@@ -364,7 +365,7 @@ function Dashboard() {
             return;
         }
 
-        const token = localStorage.getItem('token');
+        const token = obtenerToken();
 
         if (!token) {
             navigate('/login');
@@ -423,7 +424,7 @@ function Dashboard() {
             return;
         }
 
-        const token = localStorage.getItem('token');
+        const token = obtenerToken();
         if (!token) {
             navigate('/login');
             return;
@@ -464,7 +465,7 @@ function Dashboard() {
     };
 
     const handleDesactivarGastoRecurrente = async (id: number) => {
-        const token = localStorage.getItem('token');
+        const token = obtenerToken();
         if (!token) {
             navigate('/login');
             return;
@@ -488,7 +489,7 @@ function Dashboard() {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem('token');
+        limpiarToken();
         navigate('/login');
     };
 
