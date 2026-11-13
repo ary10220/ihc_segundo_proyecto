@@ -15,7 +15,7 @@ function ProtectedRoute() {
     return (
         <div style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
             <Navbar />
-            <main style={{ flex: 1, padding: '0 20px', width: '100%', boxSizing: 'border-box' }}>
+            <main style={{ flex: 1, width: '100%' }}>
                 <Outlet />
             </main>
         </div>

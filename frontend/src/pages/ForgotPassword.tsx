@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import AuthLayout from '../components/AuthLayout';
 
 function ForgotPassword() {
 
@@ -97,28 +99,27 @@ function ForgotPassword() {
 
     return (
 
-        <div>
+        <AuthLayout>
 
+            <p className="eyebrow">{recoveryStarted ? 'Paso 2 de 2' : 'Paso 1 de 2'}</p>
             <h1>Recuperar contraseña</h1>
 
             {!recoveryStarted && (
 
-                <div>
+                <>
 
-                    <p style={{ fontSize: '0.9em', color: '#666', marginBottom: '12px' }}>
+                    <p className="muted">
                         Ingresa el correo electrónico registrado en tu cuenta para iniciar el proceso de recuperación.
                     </p>
 
+                    <label htmlFor="rec-correo">Correo</label>
                     <input
-
+                        id="rec-correo"
                         type="email"
-
                         placeholder="Correo"
-
+                        autoComplete="email"
                         value={email}
-
                         onChange={(e) => setEmail(e.target.value)}
-
                     />
 
                     <button onClick={handleForgotPassword}>
@@ -127,34 +128,30 @@ function ForgotPassword() {
 
                     </button>
 
-                </div>
+                </>
 
             )}
 
             {recoveryStarted && (
 
-                <div>
+                <>
 
-                    <p style={{ fontSize: '0.9em', color: '#666', marginBottom: '6px' }}>
+                    <p className="muted">
                         Crea una nueva contraseña segura para tu cuenta.
                     </p>
 
-                    <p style={{ fontSize: '0.8em', color: '#444', backgroundColor: '#f0f4f8', padding: '6px 10px', borderRadius: '4px', marginBottom: '12px', display: 'inline-block' }}>
-                        ℹ <strong>Requisito:</strong> Mínimo 6 caracteres alfanuméricos.
-                    </p>
+                    <div className="callout">
+                        <p>ℹ <strong>Requisito:</strong> Mínimo 6 caracteres alfanuméricos.</p>
+                    </div>
 
-                    <br />
-
+                    <label htmlFor="rec-password">Nueva contraseña</label>
                     <input
-
+                        id="rec-password"
                         type="password"
-
                         placeholder="Nueva contraseña"
-
+                        autoComplete="new-password"
                         value={newPassword}
-
                         onChange={(e) => setNewPassword(e.target.value)}
-
                     />
 
                     <button onClick={handleResetPassword}>
@@ -163,15 +160,19 @@ function ForgotPassword() {
 
                     </button>
 
-                </div>
+                </>
 
             )}
 
-            <p style={{ fontSize: '0.8em', color: '#888', marginTop: '20px' }}>
+            <div className="auth-links">
+                <Link to="/login">Volver a iniciar sesión</Link>
+            </div>
+
+            <p className="fine">
                 ¿Tienes problemas para acceder? Contacta a soporte@finanzapp.com
             </p>
 
-        </div>
+        </AuthLayout>
 
     );
 

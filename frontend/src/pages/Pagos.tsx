@@ -138,31 +138,32 @@ function Pagos() {
 
     return (
 
-        <div>
+        <div className="page">
 
-            <h1>Pagos</h1>
+            <div className="page-head">
+                <p className="eyebrow">Pagos del mes</p>
+                <h1>Pagos</h1>
+            </div>
 
-            {/* Contexto financiero para reducir la carga cognitiva (centrado en la pantalla) */}
-            <div style={{
-                backgroundColor: '#f0f4f8',
-                border: '1px solid #d0d7de',
-                borderRadius: '8px',
-                padding: '16px 20px',
-                margin: '20px auto 30px auto',
-                maxWidth: '480px',
-                textAlign: 'center',
-                boxShadow: '0 2px 6px rgba(0,0,0,0.06)'
-            }}>
-                <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: '#1f2328' }}>
-                    Resumen Financiero del Mes
-                </h3>
-                <p style={{ margin: '6px 0', fontSize: '16px' }}>
-                    <strong>Saldo disponible: </strong>
+            {/* Contexto financiero para reducir la carga cognitiva */}
+            <section className="dark-card" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', gap: 16 }}>
+                <div style={{ flex: '1 1 280px' }}>
+                    <p className="eyebrow">Resumen</p>
+                    <h3 style={{ color: '#fff', fontSize: 'clamp(1.2rem, 1rem + .8vw, 1.6rem)', margin: '0 0 8px' }}>
+                        Resumen Financiero del Mes
+                    </h3>
+                    <small style={{ color: '#b9bbd0', display: 'block', fontSize: '.92rem' }}>
+                        Información actualizada del presupuesto para tomar decisiones de pago sin calcular de memoria.
+                    </small>
+                </div>
+                <p style={{ margin: 0, fontSize: '1rem', fontWeight: 600, maxWidth: 'none' }}>
+                    <strong style={{ display: 'block', color: '#b9bbd0', fontWeight: 600, fontSize: '.9rem' }}>Saldo disponible: </strong>
                     {saldoDisponible !== null ? (
                         <span style={{
-                            color: saldoDisponible >= 0 ? '#1a7f37' : '#cf222e',
-                            fontWeight: 'bold',
-                            fontSize: '18px'
+                            color: saldoDisponible >= 0 ? 'var(--highlight)' : '#ffb3bd',
+                            fontWeight: 900,
+                            fontSize: 'clamp(2rem, 1.4rem + 2.4vw, 3rem)',
+                            letterSpacing: '-0.04em'
                         }}>
                             Bs {saldoDisponible.toFixed(2)}
                         </span>
@@ -170,81 +171,84 @@ function Pagos() {
                         <span>Consultando presupuesto...</span>
                     )}
                 </p>
-                <small style={{ color: '#57606a', display: 'block', marginTop: '6px' }}>
-                    Información actualizada del presupuesto para tomar decisiones de pago sin calcular de memoria.
-                </small>
-            </div>
+            </section>
 
-            <h2>Lista de gastos</h2>
+            <section className="card">
+            <p className="eyebrow">Gastos</p>
+            <h2 style={{ marginBottom: 16 }}>Lista de gastos</h2>
 
-            {gastos.map((gasto) => (
+            <div className="rows">
+            {gastos.map((gasto) => {
+                const pagado = gasto.estado.toLowerCase().trim() === 'gastado';
+                return (
 
-                <div key={gasto.id}>
+                <div key={gasto.id} className="pay-item" style={pagado ? { background: 'var(--surface-2)' } : undefined}>
 
-                    <p>
-                        Monto: {gasto.monto}
-                    </p>
-
-                    <p>
+                    <p className="pay-motivo">
                         Motivo: {gasto.motivo}
                     </p>
 
-                    <p>
-                        Tipo: {gasto.tipo || 'gasto'}
-                    </p>
+                    <span className="amount gasto pay-monto" aria-hidden="true">Bs {Number(gasto.monto).toFixed(2)}</span>
 
-                    <p>
-                        Categoría: {gasto.categoria || 'otros'}
-                    </p>
+                    <div className="row-meta pay-full">
+                        <p>
+                            Monto: {gasto.monto}
+                        </p>
 
-                    <p>
-                        Fecha: {new Date(gasto.fecha).toLocaleString()}
-                    </p>
+                        <p>
+                            Tipo: {gasto.tipo || 'gasto'}
+                        </p>
 
-                    <p>
-                        Estado: {normalizarEstado(gasto.estado)}
-                    </p>
+                        <p>
+                            Categoría: {gasto.categoria || 'otros'}
+                        </p>
+
+                        <p>
+                            Fecha: {new Date(gasto.fecha).toLocaleString()}
+                        </p>
+
+                        <p>
+                            Estado: {normalizarEstado(gasto.estado)}
+                        </p>
+                    </div>
 
                     {/* Calculo mental asistido: muestra el impacto financiero inmediato */}
-                    {gasto.estado.toLowerCase().trim() !== 'gastado' && saldoDisponible !== null && (
-                        <div style={{
-                            backgroundColor: '#f6f8fa',
-                            border: '1px dashed #d0d7de',
-                            borderRadius: '6px',
-                            padding: '8px 12px',
-                            margin: '10px 0',
-                            maxWidth: '400px'
+                    {!pagado && saldoDisponible !== null ? (
+                        <div className="pay-saldo" style={{
+                            background: (saldoDisponible - gasto.monto) >= 0 ? 'var(--surface-2)' : 'var(--red-soft)'
                         }}>
-                            <span style={{ fontSize: '13px', display: 'block' }}>
+                            <span style={{ fontSize: '.88rem', display: 'block' }}>
                                 Saldo restante tras este pago:{' '}
                                 <strong style={{
-                                    color: (saldoDisponible - gasto.monto) >= 0 ? '#1a7f37' : '#cf222e'
+                                    color: (saldoDisponible - gasto.monto) >= 0 ? 'var(--green)' : 'var(--red)'
                                 }}>
                                     Bs {(saldoDisponible - gasto.monto).toFixed(2)}
                                 </strong>
                             </span>
                             {(saldoDisponible - gasto.monto) < 0 && (
-                                <span style={{ fontSize: '12px', color: '#cf222e', fontWeight: 'bold' }}>
+                                <span style={{ fontSize: '.84rem', color: 'var(--red)', fontWeight: 700 }}>
                                     ⚠️ Atención: Este pago superará tu saldo disponible actual.
                                 </span>
                             )}
                         </div>
-                    )}
+                    ) : <span />}
 
                     <button
+                        className="btn-small pay-btn"
                         onClick={() => handlePagarGasto(gasto.id)}
-                        disabled={gasto.estado.toLowerCase().trim() === 'gastado'}
+                        disabled={pagado}
                     >
-                        {gasto.estado.toLowerCase().trim() === 'gastado'
+                        {pagado
                             ? 'Pagado'
                             : 'Marcar como pagado'}
                     </button>
 
-                    <hr />
-
                 </div>
 
-            ))}
+                );
+            })}
+            </div>
+            </section>
 
         </div>
 

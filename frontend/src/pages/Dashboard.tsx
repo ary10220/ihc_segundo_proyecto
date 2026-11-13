@@ -501,6 +501,7 @@ function Dashboard() {
         <div className="dashboard">
             <header className="dashboard-header">
                 <div>
+                    <p className="eyebrow">Resumen del mes</p>
                     <h1>Dashboard</h1>
                     {user && (
                         <p className="dashboard-user">
@@ -578,13 +579,14 @@ function Dashboard() {
                 <h2 id="titulo-categorias">Presupuesto por categoría</h2>
                 <p className="card-periodo">Período: {mes}/{anio}</p>
 
+                <div className="tabla-scroll">
                 <table className="tabla-categorias">
                     <thead>
                         <tr>
                             <th>Categoría</th>
                             <th>Estado</th>
                             <th>Consumo</th>
-                            <th style={{ minWidth: 160 }}>Avance</th>
+                            <th style={{ minWidth: 140 }}>Avance</th>
                             <th>Restante</th>
                         </tr>
                     </thead>
@@ -648,6 +650,7 @@ function Dashboard() {
                         })}
                     </tbody>
                 </table>
+                </div>
 
                 <form
                     onSubmit={handleGuardarPresupuestoCategoria}
@@ -741,7 +744,7 @@ function Dashboard() {
                                 {recurrente.activa && (
                                     <button
                                         type="button"
-                                        className="btn btn-secondary"
+                                        className="btn btn-secondary btn-small"
                                         onClick={() =>
                                             handleDesactivarGastoRecurrente(
                                                 recurrente.id

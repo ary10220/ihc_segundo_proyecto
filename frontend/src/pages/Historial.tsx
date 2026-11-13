@@ -64,187 +64,106 @@ function Historial() {
     const ahora = new Date();
     const nombreMes = ahora.toLocaleString('es-ES', { month: 'long', year: 'numeric' });
 
+    const seg = (activo: boolean) => (activo ? 'seg on' : 'seg');
+
     return (
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '16px' }}>
-            <h1 style={{ marginBottom: '8px' }}>Historial de Movimientos del Mes</h1>
-                <p style={{ color: '#57606a', textTransform: 'capitalize', marginTop: '0' }}>
+        <div className="page">
+            <div className="page-head">
+                <p className="eyebrow">Historial</p>
+                <h1>Historial de Movimientos del Mes</h1>
+                <p style={{ textTransform: 'capitalize' }}>
                     Período actual: {nombreMes}
                 </p>
+            </div>
 
                 {/* Resumen inmediato para evitar recordar datos de otras vistas (Carga Cognitiva) */}
-                <div style={{
-                    backgroundColor: '#f6f8fa',
-                    border: '1px solid #d0d7de',
-                    borderRadius: '8px',
-                    padding: '12px 18px',
-                    margin: '16px 0',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    flexWrap: 'wrap'
-                }}>
-                    <div>
-                        <span style={{ fontSize: '13px', color: '#57606a' }}>Total movimientos del mes:</span>
-                        <strong style={{ display: 'block', fontSize: '18px' }}>{movimientos.length}</strong>
+                <div className="stats">
+                    <div className="stat">
+                        <span className="stat-label">Total movimientos del mes:</span>
+                        <strong className="stat-value">{movimientos.length}</strong>
                     </div>
-                    <div>
-                        <span style={{ fontSize: '13px', color: '#57606a' }}>Total en gastos este mes:</span>
-                        <strong style={{ display: 'block', fontSize: '18px', color: '#cf222e' }}>
+                    <div className="stat destacado">
+                        <span className="stat-label">Total en gastos este mes:</span>
+                        <strong className="stat-value">
                             Bs {totalGastos.toFixed(2)}
                         </strong>
                     </div>
                 </div>
 
+                <section className="card">
                 {/* Filtros simples (Ley de Hick) */}
-                <div style={{ display: 'flex', gap: '10px', margin: '16px 0', flexWrap: 'wrap' }}>
-                    <button
-                        type="button"
-                        onClick={() => setFiltroTipo('todos')}
-                        style={{
-                            padding: '8px 16px',
-                            cursor: 'pointer',
-                            borderRadius: '6px',
-                            border: '1px solid #ccc',
-                            backgroundColor: filtroTipo === 'todos' ? '#0066cc' : '#f5f5f5',
-                            color: filtroTipo === 'todos' ? '#fff' : '#333',
-                            fontWeight: 'bold'
-                        }}
-                    >
+                <div className="segs" style={{ marginBottom: 18 }}>
+                    <button type="button" className={seg(filtroTipo === 'todos')} onClick={() => setFiltroTipo('todos')}>
                         Todos ({movimientos.length})
                     </button>
-                    <button
-                        type="button"
-                        onClick={() => setFiltroTipo('gasto')}
-                        style={{
-                            padding: '8px 16px',
-                            cursor: 'pointer',
-                            borderRadius: '6px',
-                            border: '1px solid #ccc',
-                            backgroundColor: filtroTipo === 'gasto' ? '#d32f2f' : '#f5f5f5',
-                            color: filtroTipo === 'gasto' ? '#fff' : '#333',
-                            fontWeight: 'bold'
-                        }}
-                    >
+                    <button type="button" className={seg(filtroTipo === 'gasto')} onClick={() => setFiltroTipo('gasto')}>
                         Solo Gastos
                     </button>
-                    <button
-                        type="button"
-                        onClick={() => setFiltroTipo('ingreso')}
-                        style={{
-                            padding: '8px 16px',
-                            cursor: 'pointer',
-                            borderRadius: '6px',
-                            border: '1px solid #ccc',
-                            backgroundColor: filtroTipo === 'ingreso' ? '#2e7d32' : '#f5f5f5',
-                            color: filtroTipo === 'ingreso' ? '#fff' : '#333',
-                            fontWeight: 'bold'
-                        }}
-                    >
+                    <button type="button" className={seg(filtroTipo === 'ingreso')} onClick={() => setFiltroTipo('ingreso')}>
                         Solo Ingresos
                     </button>
                 </div>
 
                 {cargando ? (
-                    <p>Cargando movimientos del mes...</p>
+                    <p className="muted">Cargando movimientos del mes...</p>
                 ) : filtrados.length === 0 ? (
                     /* Estado Vacio orientativo (Empty State): Guia al usuario sobre que hacer a continuacion */
-                    <div style={{
-                        textAlign: 'center',
-                        padding: '40px 20px',
-                        border: '2px dashed #d0d7de',
-                        borderRadius: '8px',
-                        backgroundColor: '#fafafa',
-                        margin: '20px 0'
-                    }}>
-                        <h3 style={{ margin: '0 0 8px 0', color: '#24292f' }}>
+                    <div className="empty">
+                        <h3>
                             {movimientos.length === 0
                                 ? 'No tienes movimientos registrados este mes'
                                 : `No hay movimientos del tipo seleccionado (${filtroTipo})`}
                         </h3>
-                        <p style={{ color: '#57606a', margin: '0 0 16px 0', fontSize: '14px' }}>
+                        <p style={{ margin: '0 0 18px 0' }}>
                             {movimientos.length === 0
                                 ? 'Lleva el control de tus finanzas registrando tu primer gasto o ingreso.'
                                 : 'Puedes cambiar de pestaña para ver el resto de tus registros.'}
                         </p>
                         {movimientos.length === 0 ? (
-                            <button
-                                type="button"
-                                onClick={() => navigate('/gastos')}
-                                style={{
-                                    padding: '10px 18px',
-                                    backgroundColor: '#1f883d',
-                                    color: '#ffffff',
-                                    border: 'none',
-                                    borderRadius: '6px',
-                                    cursor: 'pointer',
-                                    fontWeight: 'bold'
-                                }}
-                            >
+                            <button type="button" onClick={() => navigate('/gastos')}>
                                 + Registrar un nuevo gasto
                             </button>
                         ) : (
-                            <button
-                                type="button"
-                                onClick={() => setFiltroTipo('todos')}
-                                style={{
-                                    padding: '8px 14px',
-                                    backgroundColor: '#0066cc',
-                                    color: '#ffffff',
-                                    border: 'none',
-                                    borderRadius: '6px',
-                                    cursor: 'pointer'
-                                }}
-                            >
+                            <button type="button" className="btn-secondary" onClick={() => setFiltroTipo('todos')}>
                                 Ver todos los movimientos
                             </button>
                         )}
                     </div>
                 ) : (
                     /* Tarjetas de eventos claras y digeribles (Carga Cognitiva minima) */
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <div className="rows">
                         {filtrados.map((m) => {
                             const esGasto = (m.tipo || 'gasto').toLowerCase() === 'gasto';
                             return (
-                                <div
-                                    key={m.id}
-                                    style={{
-                                        border: '1px solid #e1e4e8',
-                                        borderRadius: '8px',
-                                        padding: '14px 16px',
-                                        backgroundColor: '#ffffff',
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                        boxShadow: '0 1px 3px rgba(0,0,0,0.04)'
-                                    }}
-                                >
-                                    <div>
-                                        <strong style={{ fontSize: '16px', display: 'block' }}>{m.motivo}</strong>
-                                        <small style={{ color: '#57606a' }}>
-                                            {new Date(m.fecha).toLocaleDateString('es-ES', {
-                                                day: '2-digit',
-                                                month: 'short',
-                                                year: 'numeric',
-                                                hour: '2-digit',
-                                                minute: '2-digit'
-                                            })}{' '}
-                                            • Categoría: {m.categoria || 'otros'} • Estado: {m.estado}
-                                        </small>
+                                <div key={m.id} className="row-item">
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 14, flex: '1 1 240px', minWidth: 0 }}>
+                                        <span aria-hidden="true" style={{
+                                            width: 10, height: 10, borderRadius: '50%', flex: 'none',
+                                            background: esGasto ? 'var(--red)' : 'var(--green)'
+                                        }} />
+                                        <div style={{ minWidth: 0 }}>
+                                            <strong style={{ fontSize: '1.02rem', display: 'block', overflowWrap: 'anywhere' }}>{m.motivo}</strong>
+                                            <small>
+                                                {new Date(m.fecha).toLocaleDateString('es-ES', {
+                                                    day: '2-digit',
+                                                    month: 'short',
+                                                    year: 'numeric',
+                                                    hour: '2-digit',
+                                                    minute: '2-digit'
+                                                })}{' '}
+                                                • Categoría: {m.categoria || 'otros'} • Estado: {m.estado}
+                                            </small>
+                                        </div>
                                     </div>
-                                    <div style={{ textAlign: 'right' }}>
-                                        <span style={{
-                                            fontSize: '17px',
-                                            fontWeight: 'bold',
-                                            color: esGasto ? '#cf222e' : '#1a7f37'
-                                        }}>
-                                            {esGasto ? '-' : '+'} Bs {Number(m.monto).toFixed(2)}
-                                        </span>
-                                    </div>
+                                    <span className={`amount ${esGasto ? 'gasto' : 'ingreso'}`} style={{ fontSize: '1.1rem' }}>
+                                        {esGasto ? '-' : '+'} Bs {Number(m.monto).toFixed(2)}
+                                    </span>
                                 </div>
                             );
                         })}
                     </div>
                 )}
+                </section>
         </div>
     );
 }

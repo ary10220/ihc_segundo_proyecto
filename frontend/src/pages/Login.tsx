@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { track } from '../utils/analitica';
 import { guardarToken } from '../utils/auth';
+import AuthLayout from '../components/AuthLayout';
+import { Link } from 'react-router-dom';
 
 function Login() {
 
@@ -23,13 +25,8 @@ function Login() {
         if (!email.trim() || !password) {
             track('login_rechazado', { motivo: 'campos_vacios' });
             setMensajeError('Por favor ingresa tu correo y contraseña.');
-            // Tarea 9 - Analitica: validacion fallida del formulario de login.
-            track('error_validacion', { flujo: 'login', motivo: 'campos_obligatorios' });
             return;
         }
-
-        // Tarea 9 - Analitica: el usuario inicia el flujo de iniciar sesion.
-        track('login_iniciado', { flujo: 'login' });
 
         try {
 
@@ -53,16 +50,12 @@ function Login() {
 
                 console.log('Token guardado correctamente');
 
-                // Tarea 9 - Analitica: login exitoso.
-                track('login_exitoso', { flujo: 'login' });
-
                 navigate('/dashboard');
 
             } else {
 
                 track('login_rechazado', { motivo: 'credenciales' });
                 setMensajeError(data.error || 'Credenciales incorrectas. Verifica tus datos.');
-                track('login_fallido', { flujo: 'login', motivo: 'credenciales_invalidas' });
 
             }
 
@@ -71,33 +64,39 @@ function Login() {
             track('login_rechazado', { motivo: 'error_servidor' });
             console.error('Error al conectar con el servidor:', error);
             setMensajeError('No se pudo conectar con el servidor. Intenta nuevamente.');
-            track('login_fallido', { flujo: 'login', motivo: 'servidor' });
 
         }
 
     };
 
     return (
-        <div>
+        <AuthLayout>
 
+            <p className="eyebrow">Acceso</p>
             <h1>Iniciar sesión</h1>
 
+            <label htmlFor="login-correo">Correo</label>
             <input
+                id="login-correo"
                 type="email"
                 placeholder="Correo"
+                autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
             />
 
+            <label htmlFor="login-password">Contraseña</label>
             <input
+                id="login-password"
                 type="password"
                 placeholder="Contraseña"
+                autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
 
             {/* Clase 22 - Privacidad por defecto: viene DESMARCADO y con el alcance explicado. */}
-            <label style={{ display: 'block', margin: '10px 0' }}>
+            <label className="check">
                 <input
                     type="checkbox"
                     checked={mantenerSesion}
@@ -111,12 +110,17 @@ function Login() {
             </button>
 
             {mensajeError && (
-                <p role="alert" style={{ color: 'crimson', fontWeight: 'bold', marginTop: '10px' }}>
+                <p role="alert" className="msg-err">
                     {mensajeError}
                 </p>
             )}
 
-        </div>
+            <div className="auth-links">
+                <Link to="/forgot-password">¿Olvidaste tu contraseña?</Link>
+                <Link to="/register">Crear cuenta</Link>
+            </div>
+
+        </AuthLayout>
     );
 
 }

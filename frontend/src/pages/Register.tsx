@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { guardarToken } from '../utils/auth';
+import AuthLayout from '../components/AuthLayout';
+import { Link } from 'react-router-dom';
 
 function Register() {
 
@@ -67,44 +69,39 @@ function Register() {
 
     return (
 
-        <div>
+        <AuthLayout>
 
+            <p className="eyebrow">Nueva cuenta</p>
             <h1>Crear cuenta</h1>
 
+            <label htmlFor="reg-nombre">Nombre</label>
             <input
-
+                id="reg-nombre"
                 type="text"
-
                 placeholder="Nombre"
-
+                autoComplete="name"
                 value={name}
-
                 onChange={(e) => setName(e.target.value)}
-
             />
 
+            <label htmlFor="reg-correo">Correo</label>
             <input
-
+                id="reg-correo"
                 type="email"
-
                 placeholder="Correo"
-
+                autoComplete="email"
                 value={email}
-
                 onChange={(e) => setEmail(e.target.value)}
-
             />
 
+            <label htmlFor="reg-password">Contraseña</label>
             <input
-
+                id="reg-password"
                 type="password"
-
                 placeholder="Contraseña"
-
+                autoComplete="new-password"
                 value={password}
-
                 onChange={(e) => setPassword(e.target.value)}
-
             />
 
             <button onClick={handleRegister}>
@@ -113,7 +110,12 @@ function Register() {
 
             </button>
 
-        </div>
+            <div className="auth-links">
+                <span className="muted">¿Ya tienes cuenta?</span>
+                <Link to="/login">Iniciar sesión</Link>
+            </div>
+
+        </AuthLayout>
 
     );
 

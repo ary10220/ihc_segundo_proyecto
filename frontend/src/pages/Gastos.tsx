@@ -337,48 +337,73 @@ function Gastos() {
         }
     };
 
-    return (
-        <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'left' }}>
+    const seg = (activo: boolean) => (activo ? 'seg on' : 'seg');
 
-            <section style={{ border: '1px solid #ccc', borderRadius: '8px', padding: '16px', marginBottom: '20px' }}>
+    return (
+        <div className="page">
+
+            <div className="page-head">
+                <p className="eyebrow">Movimientos</p>
                 <h1>{gastoEditando === null ? 'Ingresar Gastos' : `Editando Gasto #${gastoEditando}`}</h1>
+            </div>
+
+            <div className="grid-2">
+
+            <section className="card" style={gastoEditando !== null ? { borderColor: 'var(--accent-text)', boxShadow: '0 0 0 4px var(--accent-soft)' } : undefined}>
 
             {gastoEditando !== null && (
-                <div style={{ backgroundColor: '#e7f3fe', color: '#1f2328', borderLeft: '4px solid #2196F3', padding: '10px 14px', marginBottom: '14px', borderRadius: '4px' }}>
-                    <p style={{ margin: 0, fontWeight: 'bold', color: '#0d47a1' }}>
+                <div className="callout" style={{ marginBottom: 18 }}>
+                    <p style={{ fontWeight: 700 }}>
                         Modo edición activo: Gasto #{gastoEditando} ({motivo || 'sin motivo'})
                     </p>
-                    <p style={{ margin: '4px 0 0 0', fontSize: '0.9em', color: '#555' }}>
+                    <p className="muted" style={{ marginTop: 4, fontSize: '.92rem' }}>
                         Modifica los valores deseados o cancela para volver al registro nuevo.
                     </p>
                 </div>
             )}
 
-            <input
-                type="number"
-                placeholder="Monto"
-                value={monto}
-                onChange={(e) => setMonto(e.target.value)}
-            />
+            <div style={{ display: 'grid', gap: 14 }}>
+                <div className="form-field">
+                    <label htmlFor="gasto-monto">Monto (Bs)</label>
+                    <input
+                        id="gasto-monto"
+                        type="number"
+                        placeholder="Monto"
+                        value={monto}
+                        onChange={(e) => setMonto(e.target.value)}
+                    />
+                </div>
 
-            <input
-                type="text"
-                placeholder="Motivo"
-                value={motivo}
-                onChange={(e) => setMotivo(e.target.value)}
-            />
+                <div className="form-field">
+                    <label htmlFor="gasto-motivo">Motivo</label>
+                    <input
+                        id="gasto-motivo"
+                        type="text"
+                        placeholder="Motivo"
+                        value={motivo}
+                        onChange={(e) => setMotivo(e.target.value)}
+                    />
+                </div>
 
-            <select value={tipo} onChange={(e) => setTipo(e.target.value)}>
-                <option value="gasto">Gasto</option>
-                <option value="ingreso">Ingreso</option>
-            </select>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 14 }}>
+                    <div className="form-field">
+                        <label htmlFor="gasto-tipo">Tipo</label>
+                        <select id="gasto-tipo" value={tipo} onChange={(e) => setTipo(e.target.value)}>
+                            <option value="gasto">Gasto</option>
+                            <option value="ingreso">Ingreso</option>
+                        </select>
+                    </div>
 
-            <select value={categoria} onChange={(e) => setCategoria(e.target.value)}>
-                <option value="otros">Otros</option>
-                <option value="comida">Comida</option>
-                <option value="transporte">Transporte</option>
-                <option value="estudio">Estudio</option>
-            </select>
+                    <div className="form-field">
+                        <label htmlFor="gasto-categoria">Categoría</label>
+                        <select id="gasto-categoria" value={categoria} onChange={(e) => setCategoria(e.target.value)}>
+                            <option value="otros">Otros</option>
+                            <option value="comida">Comida</option>
+                            <option value="transporte">Transporte</option>
+                            <option value="estudio">Estudio</option>
+                        </select>
+                    </div>
+                </div>
 
             {gastoEditando === null ? (
 
@@ -388,12 +413,13 @@ function Gastos() {
 
             ) : (
 
-                <>
+                <div className="actions">
                     <button onClick={() => handleActualizarGasto()} disabled={avisoLimite !== null}>
                         Guardar cambios
                     </button>
                     <button
                         type="button"
+                        className="btn-secondary"
                         onClick={() => {
                             setGastoEditando(null);
                             setMonto('');
@@ -403,13 +429,13 @@ function Gastos() {
                             setMensajeError('');
                             setAvisoLimite(null);
                         }}
-                        style={{ marginLeft: '8px' }}
                     >
                         Cancelar edición
                     </button>
-                </>
+                </div>
 
             )}
+            </div>
 
             {/* Tarea 9: aviso antes de superar el limite. Confirmar guarda; cancelar no cambia nada. */}
             {avisoLimite && (
@@ -417,196 +443,119 @@ function Gastos() {
                     role="alertdialog"
                     aria-labelledby="aviso-limite-titulo"
                     aria-describedby="aviso-limite-detalle"
-                    style={{ backgroundColor: '#fff3cd', color: '#1f2328', border: '1px solid #ffe69c', borderLeft: '4px solid #b45309', padding: '12px 14px', marginTop: '12px', borderRadius: '6px' }}
+                    className="callout warn"
+                    style={{ marginTop: 16 }}
                 >
-                    <p id="aviso-limite-titulo" style={{ margin: 0, fontWeight: 'bold' }}>
+                    <p id="aviso-limite-titulo" style={{ fontWeight: 800 }}>
                         Te pasarías del límite de {avisoLimite.categoria} por Bs {avisoLimite.exceso.toFixed(2)}
                     </p>
-                    <p id="aviso-limite-detalle" style={{ margin: '6px 0 10px 0' }}>
+                    <p id="aviso-limite-detalle" style={{ margin: '6px 0 12px 0' }}>
                         Límite del mes: Bs {avisoLimite.limite.toFixed(2)} · Ya gastado: Bs {avisoLimite.consumido.toFixed(2)} · Este gasto: Bs {avisoLimite.montoSolicitado.toFixed(2)}.
                         ¿Quieres guardarlo de todas formas?
                     </p>
-                    <button
-                        type="button"
-                        onClick={() => avisoLimite.accion === 'registrar' ? handleRegitrarGasto(true) : handleActualizarGasto(true)}
-                    >
-                        Guardar de todas formas
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => {
-                            track('aviso_limite_cancelado', { categoria: avisoLimite.categoria, accion: avisoLimite.accion });
-                            setAvisoLimite(null);
-                        }}
-                        style={{ marginLeft: '8px' }}
-                    >
-                        Cancelar
-                    </button>
+                    <div className="actions">
+                        <button
+                            type="button"
+                            className="btn-small"
+                            onClick={() => avisoLimite.accion === 'registrar' ? handleRegitrarGasto(true) : handleActualizarGasto(true)}
+                        >
+                            Guardar de todas formas
+                        </button>
+                        <button
+                            type="button"
+                            className="btn-secondary btn-small"
+                            onClick={() => {
+                                track('aviso_limite_cancelado', { categoria: avisoLimite.categoria, accion: avisoLimite.accion });
+                                setAvisoLimite(null);
+                            }}
+                        >
+                            Cancelar
+                        </button>
+                    </div>
                 </div>
             )}
 
             {mensajeExito && (
-                <p role="status" style={{ color: 'green', fontWeight: 'bold', marginTop: '8px' }}>
+                <p role="status" className="msg-ok">
                     {mensajeExito}
                 </p>
             )}
 
             {mensajeError && (
-                <p role="alert" style={{ color: 'crimson', fontWeight: 'bold', marginTop: '8px' }}>
+                <p role="alert" className="msg-err">
                     {mensajeError}
                 </p>
             )}
             </section>
 
-            <section style={{ border: '1px solid #ccc', borderRadius: '8px', padding: '16px', marginBottom: '20px' }}>
+            <section className="card">
+                <p className="eyebrow">Búsqueda</p>
                 <h2>Buscar y Filtrar Movimientos</h2>
 
-                <div style={{ marginBottom: '12px' }}>
+                <div style={{ margin: '14px 0' }}>
                     <input
                         type="text"
                         placeholder="Buscar por concepto o descripción..."
+                        aria-label="Buscar por concepto o descripción"
                         value={buscar}
                         onChange={(e) => setBuscar(e.target.value)}
-                        style={{ padding: '8px', width: '100%', maxWidth: '360px', boxSizing: 'border-box' }}
                     />
                 </div>
 
                 {/* Accesos directos principales para reducir opciones simultaneas (Ley de Hick) */}
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap', marginBottom: '10px' }}>
-                    <span style={{ fontSize: '14px', fontWeight: 'bold' }}>Filtros rápidos:</span>
-                    <button
-                        type="button"
-                        onClick={() => { setFiltroTipo(''); setFiltroPeriodo(''); }}
-                        style={{
-                            padding: '6px 12px',
-                            cursor: 'pointer',
-                            color: '#1f2328',
-                            backgroundColor: (!filtroTipo && !filtroPeriodo) ? '#d0d7de' : '#f6f8fa',
-                            border: '1px solid #d0d7de',
-                            borderRadius: '6px'
-                        }}
-                    >
+                <div className="segs" style={{ marginBottom: 10 }}>
+                    <span className="segs-label">Filtros rápidos:</span>
+                    <button type="button" className={seg(!filtroTipo && !filtroPeriodo)} onClick={() => { setFiltroTipo(''); setFiltroPeriodo(''); }}>
                         Todos
                     </button>
-                    <button
-                        type="button"
-                        onClick={() => setFiltroTipo(filtroTipo === 'gasto' ? '' : 'gasto')}
-                        style={{
-                            padding: '6px 12px',
-                            cursor: 'pointer',
-                            color: '#1f2328',
-                            backgroundColor: filtroTipo === 'gasto' ? '#cfe2ff' : '#f6f8fa',
-                            border: '1px solid #b6d4fe',
-                            borderRadius: '6px'
-                        }}
-                    >
+                    <button type="button" className={seg(filtroTipo === 'gasto')} onClick={() => setFiltroTipo(filtroTipo === 'gasto' ? '' : 'gasto')}>
                         Solo gastos
                     </button>
-                    <button
-                        type="button"
-                        onClick={() => setFiltroTipo(filtroTipo === 'ingreso' ? '' : 'ingreso')}
-                        style={{
-                            padding: '6px 12px',
-                            cursor: 'pointer',
-                            color: '#1f2328',
-                            backgroundColor: filtroTipo === 'ingreso' ? '#d1e7dd' : '#f6f8fa',
-                            border: '1px solid #a3cfbb',
-                            borderRadius: '6px'
-                        }}
-                    >
+                    <button type="button" className={seg(filtroTipo === 'ingreso')} onClick={() => setFiltroTipo(filtroTipo === 'ingreso' ? '' : 'ingreso')}>
                         Solo ingresos
                     </button>
-                    <button
-                        type="button"
-                        onClick={() => setFiltroPeriodo(filtroPeriodo === 'este_mes' ? '' : 'este_mes')}
-                        style={{
-                            padding: '6px 12px',
-                            cursor: 'pointer',
-                            color: '#1f2328',
-                            backgroundColor: filtroPeriodo === 'este_mes' ? '#fff3cd' : '#f6f8fa',
-                            border: '1px solid #ffe69c',
-                            borderRadius: '6px'
-                        }}
-                    >
+                    <button type="button" className={seg(filtroPeriodo === 'este_mes')} onClick={() => setFiltroPeriodo(filtroPeriodo === 'este_mes' ? '' : 'este_mes')}>
                         Este mes
                     </button>
+                </div>
+                <div className="segs" style={{ marginBottom: 12 }}>
                     {/* Clase 20 - Arquitectura de informacion: subir el filtro de estado al primer nivel */}
-                    <span style={{ fontSize: '14px', fontWeight: 'bold', marginLeft: '8px' }}>| Estado:</span>
-                    <button
-                        type="button"
-                        onClick={() => setFiltroEstado('')}
-                        style={{
-                            padding: '6px 12px',
-                            cursor: 'pointer',
-                            color: '#1f2328',
-                            backgroundColor: !filtroEstado ? '#cfe2ff' : '#f6f8fa',
-                            border: '1px solid #b6d4fe',
-                            borderRadius: '6px'
-                        }}
-                    >
+                    <span className="segs-label">| Estado:</span>
+                    <button type="button" className={seg(!filtroEstado)} onClick={() => setFiltroEstado('')}>
                         Todos los estados
                     </button>
-                    <button
-                        type="button"
-                        onClick={() => setFiltroEstado(filtroEstado === 'pendiente' ? '' : 'pendiente')}
-                        style={{
-                            padding: '6px 12px',
-                            cursor: 'pointer',
-                            color: '#1f2328',
-                            backgroundColor: filtroEstado === 'pendiente' ? '#cfe2ff' : '#f6f8fa',
-                            border: '1px solid #b6d4fe',
-                            borderRadius: '6px'
-                        }}
-                    >
+                    <button type="button" className={seg(filtroEstado === 'pendiente')} onClick={() => setFiltroEstado(filtroEstado === 'pendiente' ? '' : 'pendiente')}>
                         Pendientes
                     </button>
-                    <button
-                        type="button"
-                        onClick={() => setFiltroEstado(filtroEstado === 'pagado' ? '' : 'pagado')}
-                        style={{
-                            padding: '6px 12px',
-                            cursor: 'pointer',
-                            color: '#1f2328',
-                            backgroundColor: filtroEstado === 'pagado' ? '#cfe2ff' : '#f6f8fa',
-                            border: '1px solid #b6d4fe',
-                            borderRadius: '6px'
-                        }}
-                    >
+                    <button type="button" className={seg(filtroEstado === 'pagado')} onClick={() => setFiltroEstado(filtroEstado === 'pagado' ? '' : 'pagado')}>
                         Pagados
                     </button>
-                    <button
-                        type="button"
-                        onClick={() => setMostrarMasFiltros(!mostrarMasFiltros)}
-                        style={{
-                            padding: '6px 12px',
-                            cursor: 'pointer',
-                            color: '#1f2328',
-                            backgroundColor: mostrarMasFiltros ? '#e9ecef' : '#ffffff',
-                            border: '1px solid #6c757d',
-                            borderRadius: '6px',
-                            marginLeft: '4px'
-                        }}
-                    >
-                        {mostrarMasFiltros ? '▲ Menos filtros' : '▼ Más filtros'}
-                    </button>
                 </div>
+                <button
+                    type="button"
+                    className="btn-secondary btn-small"
+                    aria-expanded={mostrarMasFiltros}
+                    onClick={() => setMostrarMasFiltros(!mostrarMasFiltros)}
+                >
+                    {mostrarMasFiltros ? '▲ Menos filtros' : '▼ Más filtros'}
+                </button>
 
                 {/* Divulgacion progresiva: solo se muestran los 4 desplegables si el usuario los solicita */}
                 {mostrarMasFiltros && (
-                    <div style={{ padding: '12px', backgroundColor: '#f8f9fa', borderRadius: '6px', border: '1px solid #e9ecef', color: '#1f2328', marginBottom: '10px' }}>
-                        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
-                            <div>
-                                <label style={{ display: 'block', fontSize: '13px', marginBottom: '3px' }}>Tipo:</label>
-                                <select value={filtroTipo} onChange={(e) => setFiltroTipo(e.target.value)} style={{ padding: '4px 8px' }}>
+                    <div style={{ padding: 16, marginTop: 14, backgroundColor: 'var(--surface-2)', borderRadius: 'var(--radius-sm)' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 12 }}>
+                            <div className="form-field">
+                                <label htmlFor="filtro-tipo">Tipo:</label>
+                                <select id="filtro-tipo" value={filtroTipo} onChange={(e) => setFiltroTipo(e.target.value)}>
                                     <option value="">Todos los tipos</option>
                                     <option value="gasto">Solo gastos</option>
                                     <option value="ingreso">Solo ingresos</option>
                                 </select>
                             </div>
 
-                            <div>
-                                <label style={{ display: 'block', fontSize: '13px', marginBottom: '3px' }}>Categoría:</label>
-                                <select value={filtroCategoria} onChange={(e) => setFiltroCategoria(e.target.value)} style={{ padding: '4px 8px' }}>
+                            <div className="form-field">
+                                <label htmlFor="filtro-categoria">Categoría:</label>
+                                <select id="filtro-categoria" value={filtroCategoria} onChange={(e) => setFiltroCategoria(e.target.value)}>
                                     <option value="">Todas las categorías</option>
                                     <option value="comida">Comida</option>
                                     <option value="transporte">Transporte</option>
@@ -615,18 +564,18 @@ function Gastos() {
                                 </select>
                             </div>
 
-                            <div>
-                                <label style={{ display: 'block', fontSize: '13px', marginBottom: '3px' }}>Estado:</label>
-                                <select value={filtroEstado} onChange={(e) => setFiltroEstado(e.target.value)} style={{ padding: '4px 8px' }}>
+                            <div className="form-field">
+                                <label htmlFor="filtro-estado">Estado:</label>
+                                <select id="filtro-estado" value={filtroEstado} onChange={(e) => setFiltroEstado(e.target.value)}>
                                     <option value="">Todos los estados</option>
                                     <option value="pendiente">Pendiente</option>
                                     <option value="pagado">Pagado</option>
                                 </select>
                             </div>
 
-                            <div>
-                                <label style={{ display: 'block', fontSize: '13px', marginBottom: '3px' }}>Período:</label>
-                                <select value={filtroPeriodo} onChange={(e) => setFiltroPeriodo(e.target.value)} style={{ padding: '4px 8px' }}>
+                            <div className="form-field">
+                                <label htmlFor="filtro-periodo">Período:</label>
+                                <select id="filtro-periodo" value={filtroPeriodo} onChange={(e) => setFiltroPeriodo(e.target.value)}>
                                     <option value="">Todos los períodos</option>
                                     <option value="este_mes">Este mes</option>
                                     <option value="mes_anterior">Mes anterior</option>
@@ -636,57 +585,62 @@ function Gastos() {
                         </div>
 
                         {filtroPeriodo === 'rango' && (
-                            <div style={{ marginTop: '10px' }}>
-                                <label>Desde: </label>
-                                <input
-                                    type="date"
-                                    value={fechaDesde}
-                                    onChange={(e) => setFechaDesde(e.target.value)}
-                                    style={{ padding: '4px', marginRight: '10px' }}
-                                />
-                                <label>Hasta: </label>
-                                <input
-                                    type="date"
-                                    value={fechaHasta}
-                                    onChange={(e) => setFechaHasta(e.target.value)}
-                                    style={{ padding: '4px' }}
-                                />
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 12, marginTop: 12 }}>
+                                <div className="form-field">
+                                    <label htmlFor="filtro-desde">Desde: </label>
+                                    <input
+                                        id="filtro-desde"
+                                        type="date"
+                                        value={fechaDesde}
+                                        onChange={(e) => setFechaDesde(e.target.value)}
+                                    />
+                                </div>
+                                <div className="form-field">
+                                    <label htmlFor="filtro-hasta">Hasta: </label>
+                                    <input
+                                        id="filtro-hasta"
+                                        type="date"
+                                        value={fechaHasta}
+                                        onChange={(e) => setFechaHasta(e.target.value)}
+                                    />
+                                </div>
                             </div>
                         )}
                     </div>
                 )}
 
                 {(buscar || filtroTipo || filtroCategoria || filtroEstado || filtroPeriodo) && (
-                    <div style={{ marginTop: '10px' }}>
-                        <p><strong>Filtros activos:</strong></p>
+                    <div style={{ marginTop: 16, display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
+                        <p style={{ margin: 0, width: '100%' }}><strong>Filtros activos:</strong></p>
                         {buscar && (
-                            <span>
-                                Concepto: "{buscar}" <button onClick={() => setBuscar('')}>✕</button>{' '}
+                            <span className="chip">
+                                Concepto: "{buscar}" <button className="btn-chip" aria-label="Quitar filtro de concepto" onClick={() => setBuscar('')}>✕</button>{' '}
                             </span>
                         )}
                         {filtroTipo && (
-                            <span>
-                                Tipo: {filtroTipo} <button onClick={() => setFiltroTipo('')}>✕</button>{' '}
+                            <span className="chip">
+                                Tipo: {filtroTipo} <button className="btn-chip" aria-label="Quitar filtro de tipo" onClick={() => setFiltroTipo('')}>✕</button>{' '}
                             </span>
                         )}
                         {filtroCategoria && (
-                            <span>
-                                Categoría: {filtroCategoria} <button onClick={() => setFiltroCategoria('')}>✕</button>{' '}
+                            <span className="chip">
+                                Categoría: {filtroCategoria} <button className="btn-chip" aria-label="Quitar filtro de categoría" onClick={() => setFiltroCategoria('')}>✕</button>{' '}
                             </span>
                         )}
                         {filtroEstado && (
-                            <span>
-                                Estado: {filtroEstado} <button onClick={() => setFiltroEstado('')}>✕</button>{' '}
+                            <span className="chip">
+                                Estado: {filtroEstado} <button className="btn-chip" aria-label="Quitar filtro de estado" onClick={() => setFiltroEstado('')}>✕</button>{' '}
                             </span>
                         )}
                         {filtroPeriodo && (
-                            <span>
+                            <span className="chip">
                                 Período: {filtroPeriodo === 'rango' ? `${fechaDesde || 'inicio'} a ${fechaHasta || 'hoy'}` : filtroPeriodo.replace('_', ' ')}{' '}
-                                <button onClick={() => { setFiltroPeriodo(''); setFechaDesde(''); setFechaHasta(''); }}>✕</button>{' '}
+                                <button className="btn-chip" aria-label="Quitar filtro de período" onClick={() => { setFiltroPeriodo(''); setFechaDesde(''); setFechaHasta(''); }}>✕</button>{' '}
                             </span>
                         )}
-                        <div>
+                        <div style={{ width: '100%' }}>
                             <button
+                                className="btn-secondary btn-small"
                                 onClick={() => {
                                     setBuscar('');
                                     setFiltroTipo('');
@@ -704,109 +658,98 @@ function Gastos() {
                 )}
             </section>
 
-            <h2>Lista de movimientos</h2>
-            <p><strong>Total filtrado: Bs {totalFiltrado.toFixed(2)}</strong></p>
+            </div>
+
+            <section className="card">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 8, marginBottom: 16 }}>
+                <div>
+                    <p className="eyebrow">Registros</p>
+                    <h2>Lista de movimientos</h2>
+                </div>
+                <p style={{ margin: 0 }}><strong>Total filtrado: Bs {totalFiltrado.toFixed(2)}</strong></p>
+            </div>
 
             {gastos.length === 0 ? (
-                <p>No se encontraron movimientos con los filtros seleccionados.</p>
+                <p className="empty">No se encontraron movimientos con los filtros seleccionados.</p>
             ) : (
-                gastos.map((gasto) => {
+                <div className="rows">
+                {gastos.map((gasto) => {
                     const estaEditandoEste = gasto.id === gastoEditando;
+                    const estadoNorm = gasto.estado.toLowerCase().trim();
+                    const pagado = estadoNorm === 'gastado' || estadoNorm === 'pagado';
 
                     return (
                         <div
                             key={gasto.id}
-                            style={{
-                                padding: '10px',
-                                margin: '10px 0',
-                                border: estaEditandoEste ? '2px solid #2196F3' : '1px solid #ddd',
-                                borderRadius: '6px',
-                                backgroundColor: estaEditandoEste ? '#f4f9ff' : 'transparent'
-                            }}
+                            className={estaEditandoEste ? 'row-item editing' : 'row-item'}
                         >
+                            <div className="row-main">
                             {estaEditandoEste && (
                                 <p style={{ margin: '0 0 8px 0' }}>
-                                    <span style={{ backgroundColor: '#2196F3', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8em', fontWeight: 'bold' }}>
+                                    <span className="chip accent">
                                         EDITANDO ESTE REGISTRO
                                     </span>
                                 </p>
                             )}
 
-                            <p>
-                                <strong>Monto:</strong> <span style={{ fontSize: '1.15em', fontWeight: 'bold', color: gasto.tipo === 'ingreso' ? 'green' : '#c62828' }}>Bs {gasto.monto}</span>
-                            </p>
-
-                            <p>
+                            <p style={{ margin: 0, fontSize: '1.05rem' }}>
                                 <strong>Motivo:</strong> {gasto.motivo}
                             </p>
 
-                        <p>
-                            Tipo: {gasto.tipo || 'gasto'}
-                        </p>
+                            <div className="row-meta">
+                                <p>
+                                    Tipo: {gasto.tipo || 'gasto'}
+                                </p>
 
-                        <p>
-                            Categoría: {gasto.categoria || 'otros'}
-                        </p>
+                                <p>
+                                    Categoría: {gasto.categoria || 'otros'}
+                                </p>
 
-                        <p>
-                            Fecha: {new Date(gasto.fecha).toLocaleString()}
-                        </p>
+                                <p>
+                                    Fecha: {new Date(gasto.fecha).toLocaleString()}
+                                </p>
 
-                        <p>
-                            Estado: {gasto.estado}
-                        </p>
+                                <p>
+                                    Estado: {gasto.estado}
+                                </p>
+                            </div>
+                            </div>
 
-                        <div style={{ display: 'flex', gap: '14px', marginTop: '12px', alignItems: 'center' }}>
-                            <button
-                                onClick={() => {
-                                    if (gasto.estado.toLowerCase().trim() === 'gastado') {
-                                        alert('No se puede editar este gasto porque ya está pagado.');
-                                        return;
-                                    }
+                            <div className="row-side">
+                                <span className={`chip ${pagado ? 'green' : 'amber'}`} aria-hidden="true">{pagado ? 'Pagado' : 'Pendiente'}</span>
 
-                                    handleEditarGasto(gasto);
-                                }}
-                                style={{
-                                    backgroundColor: '#1976d2',
-                                    color: '#ffffff',
-                                    border: 'none',
-                                    borderRadius: '6px',
-                                    padding: '9px 18px',
-                                    fontSize: '0.95em',
-                                    fontWeight: 'bold',
-                                    cursor: 'pointer',
-                                    boxShadow: '0 2px 4px rgba(25, 118, 210, 0.25)',
-                                    transition: 'background-color 0.2s'
-                                }}
-                            >
-                                Editar
-                            </button>
+                                <p style={{ margin: 0 }}>
+                                    <strong>Monto:</strong> <span className={`amount ${gasto.tipo === 'ingreso' ? 'ingreso' : 'gasto'}`} style={{ fontSize: '1.15rem' }}>Bs {gasto.monto}</span>
+                                </p>
 
-                            <button
-                                onClick={() => handleEliminarGasto(gasto.id)}
-                                style={{
-                                    backgroundColor: '#d32f2f',
-                                    color: '#ffffff',
-                                    border: 'none',
-                                    borderRadius: '6px',
-                                    padding: '9px 18px',
-                                    fontSize: '0.95em',
-                                    fontWeight: 'bold',
-                                    cursor: 'pointer',
-                                    boxShadow: '0 2px 4px rgba(211, 47, 47, 0.25)',
-                                    transition: 'background-color 0.2s'
-                                }}
-                            >
-                                Eliminar
-                            </button>
-                        </div>
+                                <button
+                                    className="btn-secondary btn-small"
+                                    onClick={() => {
+                                        if (estadoNorm === 'gastado') {
+                                            alert('No se puede editar este gasto porque ya está pagado.');
+                                            return;
+                                        }
 
-                            <hr />
+                                        handleEditarGasto(gasto);
+                                    }}
+                                >
+                                    Editar
+                                </button>
+
+                                <button
+                                    className="btn-danger btn-small"
+                                    onClick={() => handleEliminarGasto(gasto.id)}
+                                >
+                                    Eliminar
+                                </button>
+                            </div>
 
                         </div>
                     );
-                })
+                })}
+                </div>
             )}
+            </section>
 
         </div>
     );

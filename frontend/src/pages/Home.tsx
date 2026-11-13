@@ -1,55 +1,48 @@
 import { Link } from 'react-router-dom';
 
-const estiloBoton = {
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '10px 20px',
-    minHeight: '44px',
-    boxSizing: 'border-box' as const,
-    fontSize: '1rem',
-    fontWeight: '500' as const,
-    borderRadius: '6px',
-    textDecoration: 'none',
-    border: '1px solid #ccc',
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
-    color: 'inherit',
-    transition: 'all 0.2s ease'
-};
-
 function Home() {
 
     return (
-        <div style={{ padding: '20px' }}>
+        <div className="public">
 
-            <h1>Bienvenido a Presupuesto Estudiantil</h1>
-
-            <p>Esta es una ruta pública.</p>
-
-            <div
-                style={{
-                    display: 'flex',
-                    gap: '12px',
-                    flexWrap: 'wrap',
-                    marginTop: '20px'
-                }}
-            >
-                <Link to="/login" style={estiloBoton}>
-                    Iniciar sesión
+            <header className="public-top">
+                <Link to="/" className="brand">
+                    <span className="brand-logo" aria-hidden="true">FA</span>
+                    FinanzApp
                 </Link>
+            </header>
 
-                <Link
-                    to="/register"
-                    style={{
-                        ...estiloBoton,
-                        backgroundColor: '#0066cc',
-                        color: '#ffffff',
-                        border: '1px solid #005bb5'
-                    }}
-                >
-                    Registrarse
-                </Link>
-            </div>
+            <main className="hero">
+
+                <p className="eyebrow">Ruta pública</p>
+
+                <h1>Bienvenido a Presupuesto Estudiantil</h1>
+
+                <p className="lead">Esta es una ruta pública.</p>
+
+                <div className="actions">
+                    <Link to="/login" className="btn btn-secondary btn-lg">
+                        Iniciar sesión
+                    </Link>
+
+                    <Link to="/register" className="btn btn-lg">
+                        Registrarse
+                    </Link>
+                </div>
+
+                <div className="flow" aria-hidden="true">
+                    <span className="pill">Registrar</span><span>→</span>
+                    <span className="pill on">Presupuestar</span><span>→</span>
+                    <span className="pill">Pagar</span><span>→</span>
+                    <span className="pill">Ahorrar</span>
+                </div>
+
+                <div className="dark-card">
+                    <p className="eyebrow">FinanzApp</p>
+                    <p>Organiza movimientos, controla tu presupuesto mensual y ahorra para tus metas.</p>
+                </div>
+
+            </main>
 
         </div>
     );

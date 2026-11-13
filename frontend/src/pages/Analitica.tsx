@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { obtenerEventos, limpiarEventos, EMBUDOS, type RegistroEvento } from '../utils/analitica';
 
-const tarjeta = { border: '1px solid #ccc', borderRadius: '8px', padding: '16px', marginBottom: '20px' };
 
 function Analitica() {
 
@@ -59,17 +58,21 @@ function Analitica() {
     const ultimos = [...eventos].reverse().slice(0, 10);
 
     return (
-        <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'left' }}>
+        <div className="page">
 
-            <h1>Analítica de interacción</h1>
-            <p style={{ color: '#555' }}>Panel propio · solo desarrollo · eventos guardados en el navegador</p>
-
-            <div style={{ marginBottom: '20px' }}>
-                <button type="button" onClick={refrescar} style={{ marginRight: '8px' }}>Actualizar</button>
-                <button type="button" onClick={() => { limpiarEventos(); refrescar(); }}>Limpiar eventos</button>
+            <div className="page-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 16 }}>
+                <div>
+                    <p className="eyebrow">FinanzApp · Clase 21</p>
+                    <h1>Analítica de interacción</h1>
+                    <p>Panel propio · solo desarrollo · eventos guardados en el navegador</p>
+                </div>
+                <div className="actions">
+                    <button type="button" className="btn-small" onClick={refrescar}>Actualizar</button>
+                    <button type="button" className="btn-secondary btn-small" onClick={() => { limpiarEventos(); refrescar(); }}>Limpiar eventos</button>
+                </div>
             </div>
 
-            <section style={{ ...tarjeta, backgroundColor: '#fff3cd', color: '#1f2328' }} aria-labelledby="titulo-mayor-caida">
+            <section className="card callout warn" style={{ borderRadius: 'var(--radius)' }} aria-labelledby="titulo-mayor-caida">
                 <h2 id="titulo-mayor-caida">Paso con la mayor caída</h2>
                 <p data-testid="mayor-caida">
                     {mayorCaida
@@ -79,14 +82,14 @@ function Analitica() {
             </section>
 
             {embudos.map(({ flujo, filas }) => (
-                <section key={flujo} style={tarjeta} aria-label={`Embudo ${flujo}`}>
+                <section key={flujo} className="card" aria-label={`Embudo ${flujo}`}>
                     <h2>{flujo}</h2>
-                    <ol style={{ paddingLeft: '20px' }}>
+                    <ol style={{ paddingLeft: '22px', margin: '10px 0 0' }}>
                         {filas.map(({ paso, cantidad, caida }) => (
                             <li key={paso} style={{ marginBottom: '6px' }}>
                                 <strong>{paso}</strong>: <span data-testid={`conteo-${paso}`}>{cantidad}</span>
                                 {caida !== null && (
-                                    <span style={{ color: caida > 0 ? '#8a1c12' : '#555' }}> · caída {caida}%</span>
+                                    <span style={{ color: caida > 0 ? 'var(--red)' : 'var(--muted)' }}> · caída {caida}%</span>
                                 )}
                             </li>
                         ))}
@@ -94,7 +97,7 @@ function Analitica() {
                 </section>
             ))}
 
-            <section style={tarjeta} aria-labelledby="titulo-errores">
+            <section className="card" aria-labelledby="titulo-errores">
                 <h2 id="titulo-errores">Errores que frenan la tarea</h2>
                 {Object.keys(errores).length === 0 ? (
                     <p>Sin errores registrados.</p>
@@ -107,7 +110,7 @@ function Analitica() {
                 )}
             </section>
 
-            <section style={tarjeta} aria-labelledby="titulo-busquedas">
+            <section className="card" aria-labelledby="titulo-busquedas">
                 <h2 id="titulo-busquedas">Búsquedas o filtros sin resultados</h2>
                 {Object.keys(busquedasVacias).length === 0 ? (
                     <p>Ninguna búsqueda vacía.</p>
@@ -120,24 +123,24 @@ function Analitica() {
                 )}
             </section>
 
-            <section style={tarjeta}>
+            <section className="card">
                 <h2>Últimos eventos</h2>
 
                 {ultimos.length === 0 ? (
                     <p>Sin eventos todavía.</p>
                 ) : (
-                    <ul style={{ listStyle: 'none', padding: 0 }}>
+                    <ul style={{ listStyle: 'none', padding: 0, margin: '10px 0 0', overflowWrap: 'anywhere' }}>
                         {ultimos.map((e, i) => (
                             <li key={i} style={{
                                 padding: '8px 10px',
-                                borderBottom: '1px solid #eee',
+                                borderBottom: '1px solid var(--line)',
                                 display: 'flex',
                                 justifyContent: 'space-between',
                                 gap: '10px',
                                 flexWrap: 'wrap'
                             }}>
                                 <span><strong>{e.evento}</strong> · {JSON.stringify(e.props)}</span>
-                                <span style={{ color: '#555' }}>{new Date(e.fecha).toLocaleString('es-BO')}</span>
+                                <span style={{ color: 'var(--muted)' }}>{new Date(e.fecha).toLocaleString('es-BO')}</span>
                             </li>
                         ))}
                     </ul>
