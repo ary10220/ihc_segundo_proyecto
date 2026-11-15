@@ -10,7 +10,7 @@ require('./src/models/MovimientoMeta');
 const Evento = require('./src/models/Evento');
 const { procesarTodasLasRecurrencias } = require('./src/services/gastoRecurrenteService');
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 
 const startServer = async () => {
     try {

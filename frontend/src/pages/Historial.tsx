@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { obtenerToken, limpiarToken } from '../utils/auth';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+
 interface Movimiento {
     id: number;
     monto: number;
@@ -27,7 +29,7 @@ function Historial() {
         }
 
         try {
-            const response = await fetch('http://localhost:4000/api/gastos/historial-mes', {
+            const response = await fetch(API_URL + '/api/gastos/historial-mes', {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
