@@ -4,6 +4,8 @@ import { guardarToken } from '../utils/auth';
 import AuthLayout from '../components/AuthLayout';
 import { Link } from 'react-router-dom';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+
 function Register() {
 
     const [name, setName] = useState('');
@@ -18,7 +20,7 @@ function Register() {
 
         try {
 
-            const response = await fetch('http://localhost:4000/api/auth/register', {
+            const response = await fetch(API_URL + '/api/auth/register', {
 
                 method: 'POST',
 

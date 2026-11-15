@@ -34,7 +34,8 @@ interface Resumen {
     movimientos: Movimiento[];
 }
 
-const API = 'http://localhost:4000/api/metas';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API = `${API_URL}/api/metas`;
 const bs = (n: string | number) => `Bs ${Number(n).toFixed(2)}`;
 
 const etiquetaTipo: Record<Movimiento['tipo'], string> = {

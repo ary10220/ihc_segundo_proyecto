@@ -4,6 +4,8 @@ import './Dashboard.css';
 import { track } from '../utils/analitica';
 import { obtenerToken, limpiarToken } from '../utils/auth';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+
 interface User {
     id: number;
     name: string;
@@ -139,7 +141,7 @@ function Dashboard() {
 
         try {
             const response = await fetch(
-                `http://localhost:4000/api/presupuesto/obtener?mes=${mes}&anio=${anio}`,
+                `${API_URL}/api/presupuesto/obtener?mes=${mes}&anio=${anio}`,
                 {
                     method: 'GET',
                     headers: {
@@ -173,7 +175,7 @@ function Dashboard() {
 
         try {
             const response = await fetch(
-                `http://localhost:4000/api/presupuesto-categoria/obtener?mes=${mes}&anio=${anio}`,
+                `${API_URL}/api/presupuesto-categoria/obtener?mes=${mes}&anio=${anio}`,
                 {
                     method: 'GET',
                     headers: {
@@ -207,7 +209,7 @@ function Dashboard() {
         if (!token) return;
 
         try {
-            const response = await fetch('http://localhost:4000/api/gastos-recurrentes', {
+            const response = await fetch(API_URL + '/api/gastos-recurrentes', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const data = await response.json();
@@ -234,7 +236,7 @@ function Dashboard() {
 
             try {
                 const response = await fetch(
-                    'http://localhost:4000/api/auth/me',
+                    API_URL + '/api/auth/me',
                     {
                         method: 'GET',
                         headers: {
@@ -308,7 +310,7 @@ function Dashboard() {
 
         try {
             const response = await fetch(
-                'http://localhost:4000/api/presupuesto/establecer',
+                API_URL + '/api/presupuesto/establecer',
                 {
                     method: 'POST',
                     headers: {
@@ -374,7 +376,7 @@ function Dashboard() {
 
         try {
             const response = await fetch(
-                'http://localhost:4000/api/presupuesto-categoria/establecer',
+                API_URL + '/api/presupuesto-categoria/establecer',
                 {
                     method: 'POST',
                     headers: {
@@ -431,7 +433,7 @@ function Dashboard() {
         }
 
         try {
-            const response = await fetch('http://localhost:4000/api/gastos-recurrentes', {
+            const response = await fetch(API_URL + '/api/gastos-recurrentes', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -471,7 +473,7 @@ function Dashboard() {
             return;
         }
         try {
-            const response = await fetch(`http://localhost:4000/api/gastos-recurrentes/${id}`, {
+            const response = await fetch(`${API_URL}/api/gastos-recurrentes/${id}`, {
                 method: 'DELETE',
                 headers: { Authorization: `Bearer ${token}` }
             });

@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthLayout from '../components/AuthLayout';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+
 function ForgotPassword() {
 
     const [email, setEmail] = useState('');
@@ -13,7 +15,7 @@ function ForgotPassword() {
 
         try {
 
-            const response = await fetch('http://localhost:4000/api/auth/forgot-password', {
+            const response = await fetch(API_URL + '/api/auth/forgot-password', {
 
                 method: 'POST',
 
@@ -57,7 +59,7 @@ function ForgotPassword() {
 
         try {
 
-            const response = await fetch('http://localhost:4000/api/auth/reset-password', {
+            const response = await fetch(API_URL + '/api/auth/reset-password', {
 
                 method: 'POST',
 

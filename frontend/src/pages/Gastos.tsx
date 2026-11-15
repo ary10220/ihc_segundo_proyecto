@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { track, type Motivo } from '../utils/analitica';
 import { obtenerToken } from '../utils/auth';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+
 // Traduce el error del backend a un motivo de la lista fija (sin guardar el texto).
 function motivoDesdeError(error: string | undefined): Motivo {
     const texto = (error || '').toLowerCase();
@@ -75,8 +77,8 @@ function Gastos() {
 
             const queryString = params.toString();
             const url = queryString
-                ? `http://localhost:4000/api/gastos/filtrar?${queryString}`
-                : 'http://localhost:4000/api/gastos/filtrar';
+                ? `${API_URL}/api/gastos/filtrar?${queryString}`
+                : API_URL + '/api/gastos/filtrar';
 
             const response = await fetch(
                 url,
@@ -148,7 +150,7 @@ function Gastos() {
         try {
 
             const response = await fetch(
-                'http://localhost:4000/api/gastos/registrar',
+                API_URL + '/api/gastos/registrar',
                 {
                     method: 'POST',
                     headers: {
@@ -220,7 +222,7 @@ function Gastos() {
         try {
 
             const response = await fetch(
-                `http://localhost:4000/api/gastos/eliminar/${id}`,
+                `${API_URL}/api/gastos/eliminar/${id}`,
                 {
                     method: 'DELETE',
                     headers: {
@@ -283,7 +285,7 @@ function Gastos() {
         try {
 
             const response = await fetch(
-                `http://localhost:4000/api/gastos/editar/${gastoEditando}`,
+                `${API_URL}/api/gastos/editar/${gastoEditando}`,
                 {
                     method: 'PUT',
                     headers: {

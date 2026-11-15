@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { obtenerToken } from '../utils/auth';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+
 interface Gasto {
 
     id: number;
@@ -40,7 +42,7 @@ function Pagos() {
             const anio = ahora.getFullYear();
 
             const response = await fetch(
-                `http://localhost:4000/api/presupuesto/obtener?mes=${mes}&anio=${anio}`,
+                `${API_URL}/api/presupuesto/obtener?mes=${mes}&anio=${anio}`,
                 {
                     method: 'GET',
                     headers: {
@@ -63,7 +65,7 @@ function Pagos() {
         try {
 
             const response = await fetch(
-                'http://localhost:4000/api/gastos/obtener',
+                API_URL + '/api/gastos/obtener',
                 {
                     method: 'GET',
                     headers: {
@@ -97,7 +99,7 @@ function Pagos() {
         try {
 
             const response = await fetch(
-                `http://localhost:4000/api/gastos/pagar/${id}`,
+                `${API_URL}/api/gastos/pagar/${id}`,
                 {
                     method: 'PUT',
                     headers: {
