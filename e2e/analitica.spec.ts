@@ -85,7 +85,7 @@ test('registrar movimiento y aviso de límite: embudo completo sin motivo ni mon
   await page.getByRole('button', { name: 'Registrar Gasto' }).click();
   await page.getByRole('alertdialog').getByRole('button', { name: 'Cancelar' }).click();
   await page.getByRole('button', { name: 'Registrar Gasto' }).click();
-  await page.getByRole('alertdialog').getByRole('button', { name: 'Guardar de todas formas' }).click();
+  await page.getByRole('alertdialog').getByRole('button', { name: 'Guardar igual' }).click();
   await expect(page.getByRole('status')).toContainText('Gasto registrado correctamente');
 
   const registrados = await eventos(page);

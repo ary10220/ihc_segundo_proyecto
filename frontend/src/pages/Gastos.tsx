@@ -453,7 +453,7 @@ function Gastos() {
                     </p>
                     <p id="aviso-limite-detalle" style={{ margin: '6px 0 12px 0' }}>
                         Límite del mes: Bs {avisoLimite.limite.toFixed(2)} · Ya gastado: Bs {avisoLimite.consumido.toFixed(2)} · Este gasto: Bs {avisoLimite.montoSolicitado.toFixed(2)}.
-                        ¿Quieres guardarlo de todas formas?
+                        ¿Quieres guardarlo igual?
                     </p>
                     <div className="actions">
                         <button
@@ -461,7 +461,7 @@ function Gastos() {
                             className="btn-small"
                             onClick={() => avisoLimite.accion === 'registrar' ? handleRegitrarGasto(true) : handleActualizarGasto(true)}
                         >
-                            Guardar de todas formas
+                            Guardar igual
                         </button>
                         <button
                             type="button"

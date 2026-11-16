@@ -78,7 +78,7 @@ test('gasto sin aviso, aviso cancelado sin cambios y aviso confirmado que deja l
 
   // 3) Mismo gasto, esta vez confirmado: se guarda y la categoría queda excedida
   await page.getByRole('button', { name: 'Registrar Gasto' }).click();
-  await page.getByRole('alertdialog').getByRole('button', { name: 'Guardar de todas formas' }).click();
+  await page.getByRole('alertdialog').getByRole('button', { name: 'Guardar igual' }).click();
   await expect(page.getByRole('status')).toContainText('Gasto registrado correctamente');
   await expect(page.getByText('Cena con amigos')).toBeVisible();
   const trasConfirmar = await usuario.estadoComida();
