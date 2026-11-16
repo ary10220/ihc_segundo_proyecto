@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { track } from '../utils/analitica';
 import { guardarToken } from '../utils/auth';
 import AuthLayout from '../components/AuthLayout';
@@ -17,6 +17,8 @@ function Login() {
     const [mantenerSesion, setMantenerSesion] = useState(false);
 
     const navigate = useNavigate();
+    // Tarea 10: confirmacion despues de eliminar la cuenta.
+    const cuentaEliminada = Boolean((useLocation().state as { cuentaEliminada?: boolean } | null)?.cuentaEliminada);
 
     const handleLogin = async () => {
         setMensajeError('');
@@ -73,6 +75,11 @@ function Login() {
 
     return (
         <AuthLayout>
+            {cuentaEliminada && (
+                <p role="status" className="msg-ok" style={{ marginTop: 0 }}>
+                    Tu cuenta y todos tus datos fueron eliminados.
+                </p>
+            )}
 
             <p className="eyebrow">Acceso</p>
             <h1>Iniciar sesión</h1>

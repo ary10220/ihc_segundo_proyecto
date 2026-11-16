@@ -28,7 +28,13 @@ export const EVENTOS = [
     'meta_fondos_asignados',
     'meta_rechazada',
     // Busquedas o filtros sin resultados
-    'busqueda_sin_resultados'
+    'busqueda_sin_resultados',
+    // Tarea 10: mis datos y salida honesta
+    'datos_descargados',
+    'eliminacion_iniciada',
+    'eliminacion_cancelada',
+    'cuenta_eliminada',
+    'eliminacion_bloqueada'
 ] as const;
 
 export type NombreEvento = typeof EVENTOS[number];
@@ -57,9 +63,11 @@ export type PropsEvento = {
     accion?: 'registrar' | 'editar' | 'asignar' | 'retirar' | 'transferir';
     motivo?: Motivo;
     filtros?: string;
+    formato?: 'json' | 'csv';
+    origen?: 'mis_datos' | 'dialogo_eliminar';
 };
 
-const PROPS_PERMITIDAS: (keyof PropsEvento)[] = ['tipo', 'categoria', 'mes', 'supera_limite', 'accion', 'motivo', 'filtros'];
+const PROPS_PERMITIDAS: (keyof PropsEvento)[] = ['tipo', 'categoria', 'mes', 'supera_limite', 'accion', 'motivo', 'filtros', 'formato', 'origen'];
 
 // Embudos por flujo principal: inicio -> exito, con pasos intermedios.
 export const EMBUDOS: { flujo: string; pasos: NombreEvento[] }[] = [
@@ -67,7 +75,8 @@ export const EMBUDOS: { flujo: string; pasos: NombreEvento[] }[] = [
     { flujo: 'Registrar movimiento', pasos: ['movimiento_iniciado', 'movimiento_guardado'] },
     { flujo: 'Aviso de límite (Tarea 9)', pasos: ['aviso_limite_mostrado', 'aviso_limite_confirmado'] },
     { flujo: 'Presupuesto mensual', pasos: ['presupuesto_iniciado', 'presupuesto_guardado'] },
-    { flujo: 'Metas de ahorro (Tarea 8)', pasos: ['meta_creada', 'meta_fondos_asignados'] }
+    { flujo: 'Metas de ahorro (Tarea 8)', pasos: ['meta_creada', 'meta_fondos_asignados'] },
+    { flujo: 'Eliminar cuenta (Tarea 10)', pasos: ['eliminacion_iniciada', 'cuenta_eliminada'] }
 ];
 
 export interface RegistroEvento {

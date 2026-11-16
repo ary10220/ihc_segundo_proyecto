@@ -40,6 +40,9 @@ function Navbar() {
                 <NavLink to="/metas" className={linkClass}>
                     Metas
                 </NavLink>
+                <NavLink to="/mis-datos" className={linkClass}>
+                    Mis datos
+                </NavLink>
             </nav>
         </header>
     );

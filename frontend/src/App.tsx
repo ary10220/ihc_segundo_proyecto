@@ -10,6 +10,7 @@ import Pagos from './pages/Pagos';
 import Historial from './pages/Historial';
 import Metas from './pages/Metas';
 import Analitica from './pages/Analitica';
+import MisDatos from './pages/MisDatos';
 
 function App() {
 
@@ -37,6 +38,7 @@ function App() {
           <Route path="/pagos" element={<Pagos />} />
           <Route path="/historial" element={<Historial />} />
           <Route path="/metas" element={<Metas />} />
+          <Route path="/mis-datos" element={<MisDatos />} />
 
         </Route>
 

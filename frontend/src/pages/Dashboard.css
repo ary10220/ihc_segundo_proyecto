@@ -257,3 +257,13 @@
 }
 .mov-meta.rechazado { background: var(--red-soft); }
 .mov-meta span:last-child { color: var(--muted); }
+
+/* Tarea 10 · Mis datos y salida honesta */
+.mis-datos-lista { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: 12px 0; }
+.mis-datos-lista dt { color: var(--muted); }
+.mis-datos-lista dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
+.mis-datos-conteos { margin: 8px 0 0 18px; padding: 0; display: grid; gap: 4px; }
+/* Confirmacion honesta: los dos botones del mismo tamano */
+.dialogo-botones { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.dialogo-botones > button { width: 100%; }
+@media (max-width: 480px) { .dialogo-botones { grid-template-columns: 1fr; } }
