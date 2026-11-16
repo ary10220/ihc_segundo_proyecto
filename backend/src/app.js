@@ -7,6 +7,7 @@ const presupuestoCategoriaRoutes = require('./routes/presupuestoCategoriaRoutes'
 const gastoRecurrenteRoutes = require('./routes/gastoRecurrenteRoutes');
 const metaRoutes = require('./routes/metaRoutes');
 const analiticaRoutes = require('./routes/analiticaRoutes');
+const misDatosRoutes = require('./routes/misDatosRoutes');
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use('/api/presupuesto-categoria', presupuestoCategoriaRoutes);
 app.use('/api/gastos-recurrentes', gastoRecurrenteRoutes);
 app.use('/api/metas', metaRoutes);
 app.use('/api/analitica', analiticaRoutes);
+app.use('/api/mis-datos', misDatosRoutes);
 app.get('/', (req, res) => {
     res.json({ message: 'Bienvenido a la API de Presupuesto Estudiantil' })
 });
