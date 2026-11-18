@@ -7,7 +7,8 @@
     "install:e2e:browser": "node e2e/run-playwright.mjs install chromium",
     "test:e2e": "node e2e/run-playwright.mjs test",
     "test:e2e:headed": "node e2e/run-playwright.mjs test --headed",
-    "a11y:lighthouse": "node e2e/lighthouse.mjs"
+    "a11y:lighthouse": "node e2e/lighthouse.mjs",
+    "video:presentacion": "node e2e/run-presentacion.mjs"
   },
   "keywords": [],
   "author": "",
