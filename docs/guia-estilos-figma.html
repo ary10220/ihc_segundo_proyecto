@@ -1,0 +1,572 @@
+<title>FinanzApp Style Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* Layout: guía de una columna con índice lateral fijo en escritorio; cada sección = un frame de Figma.
+   Diseño de un solo tema (claro) a propósito: las muestras deben verse con sus valores exactos. */
+:root {
+  --bg: #f5f5f8; --surface: #ffffff; --surface-2: #f0f0f6; --ink: #16182c; --muted: #5c5f75;
+  --line: #e3e3ec; --field-line: #d6d6e2; --accent-soft: #ecebfa; --accent-text: #4436c7;
+  --highlight: #c9c3ff; --hover-ink: #2a2d4a;
+  --green: #17734f; --green-soft: #e3f4ec; --amber: #8a5300; --amber-soft: #fdf0d9; --amber-bar: #d4891a;
+  --red: #b42335; --red-soft: #fde8eb; --side-muted: #b9bbd0;
+  --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+  --shadow: 0 1px 2px rgba(22,24,44,.04), 0 10px 30px rgba(22,24,44,.05);
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); color: var(--ink); }
+body { font: 16px/1.55 var(--sans); -webkit-font-smoothing: antialiased;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3, h4 { margin: 0; line-height: 1.1; text-wrap: balance; }
+p { margin: 0; }
+code, .mono { font-family: var(--mono); font-size: .85em; }
+code { background: var(--surface-2); padding: 2px 6px; border-radius: 6px; }
+
+.wrap { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; padding-block: 48px 96px; }
+nav.toc { position: sticky; top: max(24px, env(safe-area-inset-top, 0px)); align-self: start; display: flex; flex-direction: column; gap: 2px; }
+nav.toc .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; margin-bottom: 18px; }
+nav.toc a { color: var(--muted); text-decoration: none; font-weight: 600; font-size: .9rem; padding: 7px 12px; border-radius: 10px; }
+nav.toc a:hover { background: var(--accent-soft); color: var(--ink); }
+main { min-width: 0; display: flex; flex-direction: column; gap: 64px; }
+
+.logo { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--ink); color: var(--highlight); font-size: 13px; font-weight: 900; flex: none; }
+.eyebrow { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--accent-text); margin-bottom: 10px; }
+.eyebrow::before { content: ''; width: 28px; height: 2px; background: currentColor; }
+
+header.intro { padding-bottom: 32px; border-bottom: 1px solid var(--line); }
+header.intro h1 { font-size: clamp(2.4rem, 1.4rem + 4vw, 4.2rem); font-weight: 900; letter-spacing: -0.055em; max-width: 16ch; }
+header.intro p { color: var(--muted); font-size: 1.15rem; margin-top: 16px; max-width: 62ch; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+.fact { padding: 8px 14px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font-size: .88rem; font-weight: 600; }
+.fact b { color: var(--accent-text); }
+
+section > h2 { font-size: 1.9rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 8px; }
+section > p.lead { color: var(--muted); max-width: 66ch; margin-bottom: 24px; }
+h3.sub { font-size: 1.05rem; font-weight: 750; letter-spacing: -0.02em; margin: 28px 0 12px; }
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: clamp(18px, 2.4vw, 30px); box-shadow: var(--shadow); min-width: 0; }
+.note { border-left: 4px solid var(--accent-text); background: var(--accent-soft); padding: 14px 18px; border-radius: 0 14px 14px 0; font-size: .95rem; margin-top: 18px; }
+
+/* Paleta */
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); gap: 14px; }
+.sw { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; }
+.sw .chip-color { height: 88px; border-bottom: 1px solid var(--line); }
+.sw .info { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 2px; }
+.sw .name { font-weight: 700; font-size: .95rem; }
+.sw .use { font-size: .82rem; color: var(--muted); }
+.sw button.hex { all: unset; cursor: pointer; font-family: var(--mono); font-size: .85rem; font-weight: 600; color: var(--ink); margin-top: 6px; align-self: flex-start; padding: 2px 6px; border-radius: 6px; background: var(--surface-2); }
+.sw button.hex:hover { background: var(--accent-soft); }
+.sw button.hex:focus-visible { outline: 3px solid var(--highlight); }
+.sw .token { font-family: var(--mono); font-size: .75rem; color: var(--muted); }
+
+/* Tablas */
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); }
+table { width: 100%; border-collapse: collapse; min-width: 760px; font-size: .9rem; font-variant-numeric: tabular-nums; }
+th { text-align: left; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 800; padding: 12px 16px; background: var(--surface-2); }
+td { padding: 14px 16px; border-top: 1px solid var(--line); vertical-align: middle; }
+td.sample { white-space: nowrap; }
+
+/* Espaciado */
+.scale-row { display: flex; align-items: center; gap: 16px; padding: 8px 0; border-top: 1px solid var(--line); }
+.scale-row:first-child { border-top: 0; }
+.scale-row .bar { height: 14px; background: var(--highlight); border-radius: 4px; flex: none; }
+.scale-row .lbl { width: 70px; font-family: var(--mono); font-size: .85rem; font-weight: 600; flex: none; }
+.scale-row .desc { color: var(--muted); font-size: .88rem; min-width: 0; }
+.radius-grid, .shadow-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 160px), 1fr)); gap: 14px; }
+.rad { display: flex; flex-direction: column; gap: 8px; font-size: .85rem; }
+.rad .box { height: 84px; background: var(--surface); border: 2px solid var(--ink); }
+.shadow-grid .box { height: 110px; border-radius: 22px; background: var(--surface); display: grid; place-items: center; font-size: .85rem; font-weight: 600; text-align: center; padding: 10px; }
+
+/* Componentes (réplica exacta de la app) */
+.comp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 18px; }
+.comp { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
+.comp .stage { padding: 26px; background: var(--bg); display: flex; flex-wrap: wrap; gap: 12px; align-items: center; border-bottom: 1px solid var(--line); min-width: 0; }
+.comp .stage.col { flex-direction: column; align-items: stretch; }
+.comp .stage.white { background: var(--surface); }
+.comp .spec { padding: 16px 20px 20px; font-size: .86rem; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.comp .spec h4 { font-size: 1rem; font-weight: 750; margin-bottom: 4px; }
+.comp .spec ul { margin: 0; padding-left: 18px; color: var(--muted); }
+.comp .spec li { margin: 2px 0; }
+.comp.wide { grid-column: 1 / -1; }
+
+.b { font: inherit; font-size: 16px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 22px; border-radius: 14px; border: 1px solid var(--ink); background: var(--ink); color: #fff; cursor: default; white-space: nowrap; }
+.b.sec { background: var(--surface); color: var(--ink); border-color: var(--field-line); }
+.b.dan { background: var(--surface); color: var(--red); border-color: #f2c4cb; }
+.b.dis { background: var(--surface-2); color: var(--muted); border-color: var(--line); }
+.b.hov { background: var(--hover-ink); border-color: var(--hover-ink); }
+.b.sm { min-height: 38px; padding: 0 14px; font-size: 14px; border-radius: 11px; }
+.b.lg { min-height: 56px; padding: 0 30px; font-size: 17px; }
+.seg { font-size: 15px; font-weight: 600; min-height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); display: inline-flex; align-items: center; }
+.seg.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+.chip { display: inline-flex; align-items: center; padding: 4px 11px; border-radius: 999px; font-size: 13px; font-weight: 700; background: var(--surface-2); color: var(--muted); }
+.chip.g { background: var(--green-soft); color: var(--green); } .chip.a { background: var(--amber-soft); color: var(--amber); }
+.chip.r { background: var(--red-soft); color: var(--red); } .chip.k { background: var(--ink); color: #fff; }
+.field { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+.field label { font-size: 15px; font-weight: 600; }
+.inp { font: inherit; font-size: 16px; min-height: 48px; padding: 10px 14px; border: 1px solid var(--field-line); border-radius: 14px; background: var(--surface); color: #6b6e83; display: flex; align-items: center; justify-content: space-between; }
+.inp.focus { border-color: var(--accent-text); box-shadow: 0 0 0 4px var(--accent-soft); color: var(--ink); }
+.inp.val { color: var(--ink); }
+.check { display: flex; gap: 10px; align-items: flex-start; color: var(--muted); font-size: 15px; font-weight: 500; }
+.check i { width: 20px; height: 20px; border: 1.5px solid var(--field-line); border-radius: 5px; flex: none; margin-top: 2px; background: var(--surface); }
+.navpill { display: flex; flex-wrap: wrap; gap: 4px; padding: 6px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; }
+.navpill span { display: inline-flex; align-items: center; min-height: 44px; padding: 0 22px; border-radius: 999px; color: var(--muted); font-weight: 600; font-size: 16px; }
+.navpill span.on { background: var(--ink); color: #fff; }
+.stat { flex: 1 1 150px; display: flex; flex-direction: column; gap: 4px; padding: 20px 22px; border-radius: 18px; background: var(--surface-2); border: 1px solid var(--line); }
+.stat small { font-size: 15px; font-weight: 600; color: var(--muted); }
+.stat strong { font-size: 32px; font-weight: 900; letter-spacing: -0.045em; line-height: 1.1; }
+.stat.hi { background: var(--highlight); border-color: var(--highlight); }
+.stat.hi small { color: #2c2a55; }
+.prog { height: 10px; border-radius: 99px; background: var(--surface-2); overflow: hidden; width: 100%; }
+.prog i { display: block; height: 100%; border-radius: 99px; }
+.callout { border-left: 4px solid var(--accent-text); background: var(--accent-soft); padding: 14px 18px; border-radius: 0 14px 14px 0; font-size: 15px; }
+.callout.w { border-left-color: var(--amber); background: var(--amber-soft); }
+.msg { padding: 12px 16px; border-radius: 14px; font-size: 16px; font-weight: 600; }
+.msg.ok { background: var(--green-soft); color: var(--green); } .msg.err { background: var(--red-soft); color: var(--red); }
+.row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; padding: 16px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; width: 100%; }
+.row.ed { border: 2px solid var(--accent-text); background: var(--accent-soft); }
+.row .meta { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 15px; color: var(--muted); margin-top: 4px; }
+.amt { font-weight: 800; letter-spacing: -0.02em; font-size: 19px; white-space: nowrap; }
+.amt.g { color: var(--red); } .amt.i { color: var(--green); }
+.cardx { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 30px; box-shadow: var(--shadow); width: 100%; }
+.dark { background: var(--ink); color: #fff; border-radius: 22px; padding: 30px; width: 100%; box-shadow: 0 24px 50px rgba(22,24,44,.18); }
+.dark .eyebrow { color: var(--highlight); }
+.empty { text-align: center; padding: 36px 20px; border: 2px dashed var(--line); border-radius: 22px; background: var(--surface); width: 100%; }
+.mini-table { width: 100%; min-width: 0; font-size: 15px; }
+.mini-table th { font-size: 12px; padding: 12px 14px; }
+.mini-table th:first-child { border-radius: 12px 0 0 12px; } .mini-table th:last-child { border-radius: 0 12px 12px 0; }
+.mini-table td { padding: 14px; border-top: 0; border-bottom: 1px solid var(--line); }
+
+/* Pantallas */
+.screens { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 14px; }
+.screen { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 18px 20px; display: flex; flex-direction: column; gap: 6px; }
+.screen h4 { font-size: 1.05rem; font-weight: 750; }
+.screen .route { font-family: var(--mono); font-size: .8rem; color: var(--accent-text); }
+.screen ul { margin: 4px 0 0; padding-left: 18px; color: var(--muted); font-size: .88rem; }
+
+.toast { position: fixed; left: 50%; bottom: max(20px, calc(env(safe-area-inset-bottom, 0px) + 12px)); transform: translateX(-50%); background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 999px; font-weight: 600; font-size: .9rem; opacity: 0; transition: opacity .2s; pointer-events: none; }
+.toast.show { opacity: 1; }
+
+@media (max-width: 900px) {
+  .wrap { grid-template-columns: 1fr; gap: 24px; padding-block: 28px 72px; }
+  nav.toc { position: static; flex-direction: row; flex-wrap: wrap; }
+  nav.toc .brand { width: 100%; margin-bottom: 6px; }
+  nav.toc a { background: var(--surface); border: 1px solid var(--line); border-radius: 999px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <nav class="toc" aria-label="Índice">
+    <div class="brand"><span class="logo">FA</span>Guía FinanzApp</div>
+    <a href="#tipografia">Tipografía</a>
+    <a href="#color">Paleta de colores</a>
+    <a href="#espaciado">Espaciado y grilla</a>
+    <a href="#forma">Radios y sombras</a>
+    <a href="#componentes">Componentes</a>
+    <a href="#pantallas">Pantallas</a>
+    <a href="#responsive">Responsive</a>
+  </nav>
+
+  <main>
+    <header class="intro">
+      <p class="eyebrow">Sistema visual · Editorial Índigo</p>
+      <h1>Guía de estilos de FinanzApp para Figma</h1>
+      <p>Todo lo que usa el frontend de Presupuesto Estudiantil, con valores exactos tomados del código. Los tamaños están en píxeles para escritorio (1440 px) y para celular (375 px).</p>
+      <div class="facts">
+        <span class="fact">Fuente: <b>Inter</b></span>
+        <span class="fact">Texto base: <b>17 px / 1.55</b></span>
+        <span class="fact">Frame escritorio: <b>1440 px</b></span>
+        <span class="fact">Frame celular: <b>375 px</b></span>
+        <span class="fact">Contenido máx.: <b>1180 px</b></span>
+      </div>
+      <div class="note">En Figma: crea los colores como <b>Color styles</b> o <b>Variables</b> con los nombres de la columna «Token», y los textos como <b>Text styles</b> con los nombres de la tabla de tipografía. Así el diseño y el código usan los mismos nombres.</div>
+    </header>
+
+    <!-- ============ TIPOGRAFÍA ============ -->
+    <section id="tipografia">
+      <p class="eyebrow">01 · Texto</p>
+      <h2>Tipografía</h2>
+      <p class="lead">Una sola familia: <b>Inter</b> (Google Fonts), pesos 400, 500, 600, 700, 800 y 900. Los títulos son muy gruesos y con letras juntas (tracking negativo); el texto corrido es regular y con buen interlineado. En Figma, el «Letter spacing» en % equivale al valor <code>em</code> × 100 (−0.05em = −5%).</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Text style</th><th>Muestra</th><th>Escritorio</th><th>Celular</th><th>Peso</th><th>Interlineado</th><th>Tracking</th><th>Dónde se usa</th></tr></thead>
+          <tbody>
+            <tr><td><b>Display / Hero</b></td><td class="sample" style="font-size:40px;font-weight:900;letter-spacing:-0.06em;line-height:1.08">Bienvenido</td><td>92 px</td><td>43 px</td><td>900 Black</td><td>108%</td><td>−6%</td><td>Título del Inicio</td></tr>
+            <tr><td><b>H1 / Página</b></td><td class="sample" style="font-size:34px;font-weight:900;letter-spacing:-0.05em;line-height:1.08">Dashboard</td><td>61 px</td><td>34 px</td><td>900 Black</td><td>108%</td><td>−5%</td><td>Título de cada pantalla privada</td></tr>
+            <tr><td><b>H1 / Acceso</b></td><td class="sample" style="font-size:30px;font-weight:900;letter-spacing:-0.05em;line-height:1.08">Iniciar sesión</td><td>48 px</td><td>32 px</td><td>900 Black</td><td>108%</td><td>−5%</td><td>Login, Registro, Recuperar</td></tr>
+            <tr><td><b>Lema / Panel oscuro</b></td><td class="sample" style="font-size:28px;font-weight:900;letter-spacing:-0.05em;line-height:1.06">Controla tu dinero</td><td>54 px</td><td>29 px</td><td>900 Black</td><td>106%</td><td>−5%</td><td>Columna oscura del acceso</td></tr>
+            <tr><td><b>Número KPI</b></td><td class="sample" style="font-size:30px;font-weight:900;letter-spacing:-0.045em;line-height:1.1">Bs 9981.25</td><td>37 px</td><td>24 px</td><td>900 Black</td><td>110%</td><td>−4.5%</td><td>Límite, Gastado, Disponible, Saldo</td></tr>
+            <tr><td><b>Número destacado</b></td><td class="sample" style="font-size:30px;font-weight:900;letter-spacing:-0.04em;line-height:1.1">Bs 9981.25</td><td>48 px</td><td>32 px</td><td>900 Black</td><td>110%</td><td>−4%</td><td>Saldo disponible en Pagos</td></tr>
+            <tr><td><b>Frase destacada</b></td><td class="sample" style="font-size:22px;font-weight:700;letter-spacing:-0.02em;line-height:1.35">Organiza movimientos</td><td>27 px</td><td>19 px</td><td>700 Bold</td><td>135%</td><td>−2%</td><td>Tarjeta oscura del Inicio</td></tr>
+            <tr><td><b>H2 / Tarjeta</b></td><td class="sample" style="font-size:24px;font-weight:750;letter-spacing:-0.025em;line-height:1.08">Presupuesto mensual</td><td>25 px</td><td>19 px</td><td>750 (o 700 Bold)</td><td>108%</td><td>−2.5%</td><td>Título de cada tarjeta</td></tr>
+            <tr><td><b>H3</b></td><td class="sample" style="font-size:19px;font-weight:700;letter-spacing:-0.015em">Laptop nueva</td><td>19 px</td><td>18 px</td><td>700 Bold</td><td>108%</td><td>−1.5%</td><td>Nombre de meta, estado vacío</td></tr>
+            <tr><td><b>Lead</b></td><td class="sample" style="font-size:20px;color:var(--muted)">Esta es una ruta pública.</td><td>23 px</td><td>18 px</td><td>400 Regular</td><td>155%</td><td>0</td><td>Subtítulo del Inicio</td></tr>
+            <tr><td><b>Subtítulo de página</b></td><td class="sample" style="font-size:18px;color:var(--muted)">Período actual: noviembre</td><td>18 px</td><td>17 px</td><td>400 Regular</td><td>155%</td><td>0</td><td>Bajo el H1 (usuario, período)</td></tr>
+            <tr><td><b>Body</b></td><td class="sample" style="font-size:17px">Texto de párrafo</td><td>17 px</td><td>16 px</td><td>400 Regular</td><td>155% (26 px)</td><td>0</td><td>Todo el texto corrido</td></tr>
+            <tr><td><b>Body / Fuerte</b></td><td class="sample" style="font-size:17px;font-weight:700">Motivo: Almuerzo</td><td>17 px</td><td>16 px</td><td>700 Bold</td><td>155%</td><td>0</td><td>Título de cada fila de lista</td></tr>
+            <tr><td><b>Botón</b></td><td class="sample" style="font-size:16px;font-weight:700">Registrar Gasto</td><td>16 px</td><td>15 px</td><td>700 Bold</td><td>100%</td><td>0</td><td>Botones normales</td></tr>
+            <tr><td><b>Label</b></td><td class="sample" style="font-size:15px;font-weight:600">Monto (Bs)</td><td>15 px</td><td>14 px</td><td>600 SemiBold</td><td>155%</td><td>0</td><td>Etiqueta sobre cada campo</td></tr>
+            <tr><td><b>Meta / Caption</b></td><td class="sample" style="font-size:15px;color:var(--muted)">Categoría: comida</td><td>15 px</td><td>14 px</td><td>400 Regular</td><td>155%</td><td>0</td><td>Datos secundarios de filas</td></tr>
+            <tr><td><b>Botón pequeño</b></td><td class="sample" style="font-size:14px;font-weight:700">Editar</td><td>14 px</td><td>13 px</td><td>700 Bold</td><td>100%</td><td>0</td><td>Acciones en filas</td></tr>
+            <tr><td><b>Fine print</b></td><td class="sample" style="font-size:14px;color:var(--muted)">¿Problemas para acceder?</td><td>14 px</td><td>13 px</td><td>400 Regular</td><td>155%</td><td>0</td><td>Notas al pie</td></tr>
+            <tr><td><b>Chip</b></td><td class="sample"><span class="chip g">Pagado</span></td><td>13 px</td><td>12 px</td><td>700 Bold</td><td>100%</td><td>0</td><td>Estados (Pagado, Pendiente…)</td></tr>
+            <tr><td><b>Eyebrow</b></td><td class="sample"><span class="eyebrow" style="margin:0">Movimientos</span></td><td>12 px</td><td>12 px</td><td>800 ExtraBold</td><td>100%</td><td>+16%, MAYÚSCULAS</td><td>Etiqueta sobre títulos, con línea de 28×2 px</td></tr>
+            <tr><td><b>Encabezado de tabla</b></td><td class="sample" style="font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">Categoría</td><td>12 px</td><td>12 px</td><td>800 ExtraBold</td><td>100%</td><td>+12%, MAYÚSCULAS</td><td>Cabecera de la tabla de categorías</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note">Si Figma no ofrece el peso 750, usa <b>Inter Bold (700)</b>. Con «Inter Variable» se puede escribir 750 exacto. En pantallas de 1600 px o más, todo el texto crece un 6% (base 18 px).</div>
+    </section>
+
+    <!-- ============ COLOR ============ -->
+    <section id="color">
+      <p class="eyebrow">02 · Color</p>
+      <h2>Paleta de colores · Índigo</h2>
+      <p class="lead">Base neutra gris-lavanda, tinta casi negra para botones y títulos, y lavanda como único color de realce. Verde, ámbar y rojo se usan solo para estados (pagado, alerta, gasto o error), nunca como decoración. Haz clic en un código para copiarlo.</p>
+
+      <h3 class="sub">Neutros y marca</h3>
+      <div class="swatches" id="sw-base"></div>
+      <h3 class="sub">Estados</h3>
+      <div class="swatches" id="sw-estados"></div>
+      <div class="note">Contraste: todos los textos sobre su fondo cumplen WCAG AA (4.5:1). No uses blanco sobre lavanda <code>#C9C3FF</code>; sobre lavanda el texto va en tinta <code>#16182C</code>.</div>
+    </section>
+
+    <!-- ============ ESPACIADO ============ -->
+    <section id="espaciado">
+      <p class="eyebrow">03 · Ritmo</p>
+      <h2>Espaciado y grilla</h2>
+      <p class="lead">El espaciado se basa en múltiplos cercanos a 4 px. En Figma, usa Auto Layout con estos «gap» y «padding».</p>
+      <div class="grid-2" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:18px">
+        <div class="panel">
+          <h3 class="sub" style="margin-top:0">Escala de separaciones</h3>
+          <div id="spacing"></div>
+        </div>
+        <div class="panel">
+          <h3 class="sub" style="margin-top:0">Grilla de página</h3>
+          <div class="table-wrap" style="border:0;border-radius:0">
+            <table style="min-width:0">
+              <tbody>
+                <tr><td>Ancho máx. del contenido</td><td><b>1180 px</b> (1320 px desde 1600)</td></tr>
+                <tr><td>Margen lateral</td><td><b>48 px</b> escritorio · <b>16 px</b> celular</td></tr>
+                <tr><td>Padding superior de página</td><td><b>48 px</b> · <b>24 px</b> celular</td></tr>
+                <tr><td>Padding inferior de página</td><td><b>64 px</b></td></tr>
+                <tr><td>Separación entre tarjetas</td><td><b>22 px</b></td></tr>
+                <tr><td>Padding de tarjeta</td><td><b>30 px</b> · <b>18 px</b> celular</td></tr>
+                <tr><td>Columnas de escritorio</td><td>2 columnas iguales (mín. 340 px), gap 22 px</td></tr>
+                <tr><td>Grilla de KPI</td><td>3 columnas (mín. 190 px), gap 14 px</td></tr>
+                <tr><td>Ancho del formulario de acceso</td><td><b>460 px</b> máx.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FORMA ============ -->
+    <section id="forma">
+      <p class="eyebrow">04 · Forma</p>
+      <h2>Radios, bordes y sombras</h2>
+      <p class="lead">Esquinas generosas y redondeadas; bordes de 1 px en <code>#E3E3EC</code> (tarjetas) o <code>#D6D6E2</code> (campos y botón secundario). Las sombras son casi invisibles: solo despegan la tarjeta del fondo.</p>
+      <h3 class="sub">Radios</h3>
+      <div class="radius-grid">
+        <div class="rad"><div class="box" style="border-radius:22px"></div><b>22 px</b><span class="muted" style="color:var(--muted)">Tarjetas, panel oscuro, estado vacío</span></div>
+        <div class="rad"><div class="box" style="border-radius:18px"></div><b>18 px</b><span style="color:var(--muted)">KPI, tarjeta de meta</span></div>
+        <div class="rad"><div class="box" style="border-radius:14px"></div><b>14 px</b><span style="color:var(--muted)">Botones, campos, filas, mensajes</span></div>
+        <div class="rad"><div class="box" style="border-radius:11px"></div><b>11 px</b><span style="color:var(--muted)">Botón pequeño</span></div>
+        <div class="rad"><div class="box" style="border-radius:999px"></div><b>999 px</b><span style="color:var(--muted)">Menú, filtros, chips, barras</span></div>
+      </div>
+      <h3 class="sub">Sombras (Drop shadow en Figma)</h3>
+      <div class="shadow-grid">
+        <div class="box" style="box-shadow:var(--shadow);border:1px solid var(--line)">Tarjeta<br><span class="mono" style="color:var(--muted);font-weight:500">Y1 B2 #16182C 4%<br>+ Y10 B30 #16182C 5%</span></div>
+        <div class="box" style="background:var(--ink);color:#fff;box-shadow:0 24px 50px rgba(22,24,44,.18)">Panel oscuro<br><span class="mono" style="color:var(--side-muted);font-weight:500">Y24 B50 #16182C 18%</span></div>
+        <div class="box" style="border:1px solid var(--accent-text);box-shadow:0 0 0 4px var(--accent-soft)">Foco de campo<br><span class="mono" style="color:var(--muted);font-weight:500">Spread 4 #ECEBFA</span></div>
+      </div>
+    </section>
+
+    <!-- ============ COMPONENTES ============ -->
+    <section id="componentes">
+      <p class="eyebrow">05 · Piezas</p>
+      <h2>Componentes</h2>
+      <p class="lead">Cada pieza tal como aparece en la app, con sus medidas. En Figma conviene crearlas como <b>Components</b> con <b>Variants</b> para los estados.</p>
+
+      <div class="comp-grid">
+        <div class="comp wide">
+          <div class="stage" style="justify-content:space-between">
+            <span style="display:flex;align-items:center;gap:12px;font-weight:800;font-size:18px"><span class="logo">FA</span>FinanzApp</span>
+            <div class="navpill"><span class="on">Dashboard</span><span>Gastos</span><span>Pagos</span><span>Historial</span><span>Metas</span></div>
+            <span class="b sec sm">Cerrar sesión</span>
+          </div>
+          <div class="spec"><h4>Barra superior (Navbar)</h4><ul>
+            <li>Logo: círculo 38 px tinta <code>#16182C</code>, letras «FA» 13 px Black en lavanda; nombre 18 px ExtraBold.</li>
+            <li>Menú: cápsula blanca, borde 1 px <code>#E3E3EC</code>, padding 6 px, gap 4 px, radio 999.</li>
+            <li>Pestaña: alto 44 px, padding 0 22 px, 16 px SemiBold <code>#5C5F75</code>. Activa: fondo tinta y texto blanco. Hover: fondo <code>#ECEBFA</code>.</li>
+            <li>Escritorio: logo · menú centrado · Cerrar sesión. Por debajo de 980 px el menú baja a su propia fila; en celular es una grilla de 3 + 2.</li>
+          </ul></div>
+        </div>
+
+        <div class="comp">
+          <div class="stage"><span class="b">Registrar Gasto</span><span class="b hov">Hover</span><span class="b dis">Pagado</span></div>
+          <div class="spec"><h4>Botón principal</h4><ul>
+            <li>Alto 48 px, padding 0 22 px, radio 14, texto 16 px Bold blanco.</li>
+            <li>Fondo <code>#16182C</code>. Hover <code>#2A2D4A</code> y sube 1 px.</li>
+            <li>Deshabilitado: fondo <code>#F0F0F6</code>, texto <code>#5C5F75</code>.</li>
+            <li>Grande (Inicio): alto 56 px, padding 0 30 px, texto 17 px.</li>
+          </ul></div>
+        </div>
+
+        <div class="comp">
+          <div class="stage"><span class="b sec">Cancelar edición</span><span class="b sec sm">Editar</span><span class="b dan sm">Eliminar</span></div>
+          <div class="spec"><h4>Secundario, pequeño y peligro</h4><ul>
+            <li>Secundario: fondo blanco, borde <code>#D6D6E2</code>, texto tinta. Hover: fondo <code>#F0F0F6</code> y borde tinta.</li>
+            <li>Pequeño: alto 38 px, padding 0 14 px, radio 11, 14 px Bold.</li>
+            <li>Peligro: texto <code>#B42335</code>, borde <code>#F2C4CB</code>; hover fondo <code>#FDE8EB</code>.</li>
+          </ul></div>
+        </div>
+
+        <div class="comp">
+          <div class="stage"><span class="segs-label" style="font-size:15px;font-weight:700;color:var(--muted)">Filtros rápidos:</span><span class="seg on">Todos</span><span class="seg">Solo gastos</span><span class="seg">Este mes</span></div>
+          <div class="spec"><h4>Filtro en píldora</h4><ul>
+            <li>Alto 40 px, padding 0 16 px, radio 999, 15 px SemiBold.</li>
+            <li>Normal: blanco con borde <code>#E3E3EC</code>. Activo: fondo tinta, texto blanco. Hover: <code>#ECEBFA</code>.</li>
+            <li>Separación entre píldoras: 8 px. Se acomodan en varias filas.</li>
+          </ul></div>
+        </div>
+
+        <div class="comp">
+          <div class="stage"><span class="chip g">Pagado</span><span class="chip a">Pendiente</span><span class="chip r">Excedido</span><span class="chip">Sin límite</span><span class="chip k">EDITANDO ESTE REGISTRO</span></div>
+          <div class="spec"><h4>Chips de estado</h4><ul>
+            <li>Padding 4 × 11 px, radio 999, 13 px Bold.</li>
+            <li>Verde = pagado / en orden; ámbar = pendiente / alerta; rojo = excedido; gris = sin dato; tinta = edición.</li>
+          </ul></div>
+        </div>
+
+        <div class="comp">
+          <div class="stage col white">
+            <div class="field"><label>Monto (Bs)</label><div class="inp">Monto</div></div>
+            <div class="field"><label>Motivo</label><div class="inp focus">Almuerzo|</div></div>
+            <div class="field"><label>Categoría</label><div class="inp val">Comida <span aria-hidden="true">⌄</span></div></div>
+          </div>
+          <div class="spec"><h4>Campo de texto y selector</h4><ul>
+            <li>Label 15 px SemiBold, 6 px arriba del campo.</li>
+            <li>Campo: alto 48 px, padding 10 × 14 px, radio 14, borde <code>#D6D6E2</code>, texto 16 px.</li>
+            <li>Placeholder <code>#6B6E83</code>. Foco: borde <code>#4436C7</code> + anillo 4 px <code>#ECEBFA</code>.</li>
+            <li>Selector: igual, con flecha a 16 px del borde derecho.</li>
+          </ul></div>
+        </div>
+
+        <div class="comp">
+          <div class="stage col white"><label class="check"><i></i>Mantener sesión iniciada (solo si usás tu propio dispositivo)</label></div>
+          <div class="spec"><h4>Casilla de verificación</h4><ul>
+            <li>Caja 20 × 20 px, radio 5, color de marca <code>#4436C7</code> al marcar.</li>
+            <li>Texto 15 px Medium <code>#5C5F75</code>, separación 10 px.</li>
+          </ul></div>
+        </div>
+
+        <div class="comp wide">
+          <div class="stage">
+            <div class="stat"><small>Límite</small><strong>Bs 10000.00</strong></div>
+            <div class="stat"><small>Gastado</small><strong>Bs 18.75</strong></div>
+            <div class="stat hi"><small>Disponible</small><strong>Bs 9981.25</strong></div>
+          </div>
+          <div class="spec"><h4>Tarjeta KPI</h4><ul>
+            <li>Padding 20 × 22 px, radio 18, fondo <code>#F0F0F6</code>, borde <code>#E3E3EC</code>, gap 4 px.</li>
+            <li>Etiqueta 15 px SemiBold gris; número con el estilo «Número KPI».</li>
+            <li>La última (Disponible) va destacada: fondo lavanda <code>#C9C3FF</code>, etiqueta <code>#2C2A55</code>.</li>
+          </ul></div>
+        </div>
+
+        <div class="comp">
+          <div class="stage col white">
+            <div class="prog"><i style="width:45%;background:var(--green)"></i></div>
+            <div class="prog"><i style="width:88%;background:var(--amber-bar)"></i></div>
+            <div class="prog"><i style="width:100%;background:var(--red)"></i></div>
+            <div class="prog"><i style="width:60%;background:var(--ink)"></i></div>
+          </div>
+          <div class="spec"><h4>Barra de avance</h4><ul>
+            <li>Alto 10 px, radio 999, fondo <code>#F0F0F6</code>.</li>
+            <li>Relleno: verde en orden, ámbar <code>#D4891A</code> desde 80%, rojo excedido, tinta para metas (verde al 100%).</li>
+          </ul></div>
+        </div>
+
+        <div class="comp">
+          <div class="stage col white">
+            <div class="msg ok">Gasto registrado correctamente.</div>
+            <div class="msg err">Credenciales incorrectas. Verifica tus datos.</div>
+          </div>
+          <div class="spec"><h4>Mensajes de éxito y error</h4><ul>
+            <li>Padding 12 × 16 px, radio 14, 16 px SemiBold.</li>
+            <li>Éxito: fondo <code>#E3F4EC</code>, texto <code>#17734F</code>. Error: fondo <code>#FDE8EB</code>, texto <code>#B42335</code>.</li>
+          </ul></div>
+        </div>
+
+        <div class="comp">
+          <div class="stage col white">
+            <div class="callout"><b>Modo edición activo:</b> Gasto #12 (Almuerzo)</div>
+            <div class="callout w"><b>Te pasarías del límite de comida por Bs 20.00</b><br>¿Quieres guardarlo de todas formas?</div>
+          </div>
+          <div class="spec"><h4>Aviso (callout)</h4><ul>
+            <li>Borde izquierdo 4 px, esquinas derechas 14 px, padding 14 × 18 px.</li>
+            <li>Info: borde <code>#4436C7</code>, fondo <code>#ECEBFA</code>. Advertencia: borde <code>#8A5300</code>, fondo <code>#FDF0D9</code>.</li>
+          </ul></div>
+        </div>
+
+        <div class="comp wide">
+          <div class="stage col">
+            <div class="row"><div style="min-width:0;flex:1 1 260px"><b style="font-size:17px">Motivo: Almuerzo en el comedor</b><div class="meta"><span>Tipo: gasto</span><span>Categoría: comida</span><span>Fecha: 13/11/2026</span></div></div>
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="chip a">Pendiente</span><span class="amt g">Bs 25</span><span class="b sec sm">Editar</span><span class="b dan sm">Eliminar</span></div></div>
+            <div class="row ed"><div style="min-width:0;flex:1 1 260px"><span class="chip k" style="margin-bottom:8px">EDITANDO ESTE REGISTRO</span><br><b style="font-size:17px">Motivo: Libro de Física</b><div class="meta"><span>Tipo: gasto</span><span>Categoría: estudio</span></div></div>
+              <div style="display:flex;gap:10px;align-items:center"><span class="amt g">Bs 102</span></div></div>
+            <div class="row"><div style="display:flex;gap:14px;align-items:center"><i style="width:10px;height:10px;border-radius:50%;background:var(--green);flex:none"></i><div><b style="font-size:17px">Mesada de noviembre</b><div class="meta"><span>01 nov 2026 · Categoría: otros · Estado: pagado</span></div></div></div><span class="amt i">+ Bs 1800.00</span></div>
+          </div>
+          <div class="spec"><h4>Fila de lista (Gastos, Pagos, Historial)</h4><ul>
+            <li>Padding 16 × 20 px, radio 14, fondo blanco, borde <code>#E3E3EC</code>, filas separadas 10 px.</li>
+            <li>Izquierda: título Body Fuerte y debajo datos en Meta (gap 4 × 14 px). Derecha: chip, monto y botones pequeños (gap 10 px).</li>
+            <li>Monto 19 px ExtraBold: rojo <code>#B42335</code> si es gasto, verde <code>#17734F</code> si es ingreso.</li>
+            <li>En edición: borde 2 px <code>#4436C7</code> y fondo <code>#ECEBFA</code>. En Historial lleva un punto de color de 10 px.</li>
+            <li>En celular la parte derecha baja debajo del título.</li>
+          </ul></div>
+        </div>
+
+        <div class="comp wide">
+          <div class="stage white">
+            <table class="mini-table">
+              <thead><tr><th>Categoría</th><th>Estado</th><th>Consumo</th><th>Avance</th><th>Restante</th></tr></thead>
+              <tbody>
+                <tr><td><b>Comida</b></td><td><span class="chip g">En orden</span></td><td>Bs 412.00 / Bs 600.00</td><td><div class="prog"><i style="width:69%;background:var(--green)"></i></div></td><td>Bs 188.00</td></tr>
+                <tr><td><b>Transporte</b></td><td><span class="chip a">Cerca del límite</span></td><td>Bs 238.00 / Bs 250.00</td><td><div class="prog"><i style="width:95%;background:var(--amber-bar)"></i></div></td><td>Bs 12.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="spec"><h4>Tabla de categorías</h4><ul>
+            <li>Cabecera: fondo <code>#F0F0F6</code>, radio 12 en los extremos, texto «Encabezado de tabla».</li>
+            <li>Celdas: padding 14 px, separador inferior 1 px <code>#E3E3EC</code>; primera columna en Bold.</li>
+            <li>En celular la tabla se desplaza horizontalmente dentro de su tarjeta (ancho mínimo 620 px).</li>
+          </ul></div>
+        </div>
+
+        <div class="comp">
+          <div class="stage white"><div class="cardx"><p class="eyebrow">Presupuesto</p><b style="font-size:24px;letter-spacing:-0.025em">Presupuesto mensual</b><p style="color:var(--muted);font-size:15px;margin-top:4px">Período: 11/2026</p></div></div>
+          <div class="spec"><h4>Tarjeta (card)</h4><ul>
+            <li>Fondo blanco, borde 1 px <code>#E3E3EC</code>, radio 22, padding 30 px (18 en celular), sombra «Tarjeta».</li>
+            <li>Arriba: eyebrow opcional, H2 y subtítulo gris 15 px; 18 px antes del contenido.</li>
+          </ul></div>
+        </div>
+
+        <div class="comp">
+          <div class="stage white"><div class="dark"><p class="eyebrow">Resumen</p><b style="font-size:22px">Resumen Financiero del Mes</b><p style="color:var(--side-muted);font-size:15px;margin:6px 0 14px">Saldo disponible:</p><b style="font-size:36px;letter-spacing:-0.04em;color:var(--highlight)">Bs 9981.25</b></div></div>
+          <div class="spec"><h4>Panel oscuro</h4><ul>
+            <li>Fondo tinta <code>#16182C</code>, radio 22, padding 30 px, sombra «Panel oscuro».</li>
+            <li>Eyebrow y número en lavanda; texto secundario <code>#B9BBD0</code>.</li>
+            <li>Se usa en Inicio, Pagos y en la columna del acceso.</li>
+          </ul></div>
+        </div>
+
+        <div class="comp">
+          <div class="stage white"><div class="empty"><b style="font-size:19px">No tienes movimientos registrados este mes</b><p style="color:var(--muted);margin:6px 0 16px;font-size:15px">Lleva el control de tus finanzas registrando tu primer gasto o ingreso.</p><span class="b">+ Registrar un nuevo gasto</span></div></div>
+          <div class="spec"><h4>Estado vacío</h4><ul>
+            <li>Borde 2 px discontinuo <code>#E3E3EC</code>, radio 22, padding 36 × 20 px, centrado.</li>
+            <li>H3, texto gris y un botón de acción.</li>
+          </ul></div>
+        </div>
+
+        <div class="comp">
+          <div class="stage"><span class="seg">Registrar</span><span aria-hidden="true" style="color:var(--muted)">→</span><span class="seg" style="background:var(--highlight);border-color:var(--highlight);font-weight:700">Presupuestar</span><span aria-hidden="true" style="color:var(--muted)">→</span><span class="seg">Pagar</span></div>
+          <div class="spec"><h4>Recorrido del Inicio</h4><ul>
+            <li>Píldoras padding 10 × 20 px, 16 px Bold, borde <code>#E3E3EC</code>; la del medio en lavanda.</li>
+            <li>Flechas en gris, separación 10 px.</li>
+          </ul></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PANTALLAS ============ -->
+    <section id="pantallas">
+      <p class="eyebrow">06 · Estructura</p>
+      <h2>Pantallas a diseñar</h2>
+      <p class="lead">Diez pantallas. Los textos de botones y títulos son los de la app y no se cambian. Cada pantalla privada empieza con la barra superior y una cabecera: eyebrow, H1 y una línea divisoria de 1 px a 22 px debajo.</p>
+      <div class="screens">
+        <div class="screen"><span class="route">/</span><h4>Inicio</h4><ul><li>Logo arriba a la izquierda.</li><li>Eyebrow «Ruta pública», título Display «Bienvenido a Presupuesto Estudiantil», lead.</li><li>Botones grandes «Iniciar sesión» (secundario) y «Registrarse» (principal).</li><li>Recorrido en píldoras y panel oscuro con la frase.</li></ul></div>
+        <div class="screen"><span class="route">/login</span><h4>Iniciar sesión</h4><ul><li>Dos columnas: panel oscuro a la izquierda (logo, lema, pie) y formulario a la derecha (máx. 460 px).</li><li>Correo, Contraseña, casilla «Mantener sesión iniciada», botón ancho «Iniciar sesión».</li><li>Enlaces «¿Olvidaste tu contraseña?» y «Crear cuenta».</li></ul></div>
+        <div class="screen"><span class="route">/register</span><h4>Crear cuenta</h4><ul><li>Mismo marco que el login.</li><li>Nombre, Correo, Contraseña y botón «Registrarse».</li><li>«¿Ya tienes cuenta? Iniciar sesión».</li></ul></div>
+        <div class="screen"><span class="route">/forgot-password</span><h4>Recuperar contraseña</h4><ul><li>Paso 1 de 2: correo y «Continuar».</li><li>Paso 2 de 2: aviso de requisito, «Nueva contraseña» y «Cambiar contraseña».</li><li>Enlace de vuelta y nota de soporte.</li></ul></div>
+        <div class="screen"><span class="route">/dashboard</span><h4>Dashboard</h4><ul><li>Cabecera con usuario y botón «Cerrar sesión».</li><li>Tarjeta «Presupuesto mensual»: 3 KPI y formulario en fila.</li><li>Tarjeta «Presupuesto por categoría»: tabla y formulario.</li><li>Tarjeta «Gastos recurrentes»: lista en grilla y formulario de 5 campos.</li></ul></div>
+        <div class="screen"><span class="route">/gastos</span><h4>Ingresar Gastos</h4><ul><li>Dos columnas: formulario (Monto, Motivo, Tipo + Categoría, «Registrar Gasto») y «Buscar y Filtrar Movimientos».</li><li>Filtros rápidos, filtros de estado y «▼ Más filtros» con 4 selectores.</li><li>Tarjeta «Lista de movimientos» con filas y total filtrado.</li></ul></div>
+        <div class="screen"><span class="route">/pagos</span><h4>Pagos</h4><ul><li>Panel oscuro «Resumen Financiero del Mes» con el saldo grande a la derecha.</li><li>Tarjeta «Lista de gastos»: cada fila con monto, saldo restante tras el pago y «Marcar como pagado».</li></ul></div>
+        <div class="screen"><span class="route">/historial</span><h4>Historial de Movimientos del Mes</h4><ul><li>2 KPI: total de movimientos y total en gastos (destacado).</li><li>Filtros «Todos», «Solo Gastos», «Solo Ingresos».</li><li>Filas con punto de color y monto con signo.</li></ul></div>
+        <div class="screen"><span class="route">/metas</span><h4>Metas de ahorro</h4><ul><li>«Tu saldo» con 3 KPI.</li><li>«Nueva meta» en fila; «Mis metas» en grilla de tarjetas con barra, monto y «Asignar» / «Retirar».</li><li>«Transferir entre metas» y «Historial de movimientos».</li></ul></div>
+        <div class="screen"><span class="route">/analitica</span><h4>Analítica de interacción</h4><ul><li>Cabecera con «Actualizar» y «Limpiar eventos».</li><li>Aviso ámbar «Paso con la mayor caída».</li><li>Tarjetas por embudo, errores, búsquedas sin resultados y últimos eventos.</li></ul></div>
+      </div>
+    </section>
+
+    <!-- ============ RESPONSIVE ============ -->
+    <section id="responsive">
+      <p class="eyebrow">07 · Tamaños</p>
+      <h2>Comportamiento responsive</h2>
+      <p class="lead">Conviene diseñar cada pantalla en dos frames: <b>Desktop 1440 × 1024</b> y <b>iPhone 375 × 812</b>. Estos son los cortes donde cambia el diseño.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Ancho</th><th>Qué cambia</th></tr></thead>
+          <tbody>
+            <tr><td><b>≥ 1600 px</b></td><td>Texto base 18 px y contenido hasta 1320 px.</td></tr>
+            <tr><td><b>≤ 980 px</b></td><td>El menú de pestañas baja a una fila propia, debajo del logo y «Cerrar sesión».</td></tr>
+            <tr><td><b>≤ 900 px</b></td><td>Login y Registro pasan a una columna: el panel oscuro queda arriba, más bajo.</td></tr>
+            <tr><td><b>≤ 720 px</b></td><td>Texto base 16 px. Menú en grilla de 3 + 2. Las filas de lista ponen montos y botones debajo. Las dos columnas de Gastos y los KPI se apilan.</td></tr>
+            <tr><td><b>≤ 420 px</b></td><td>Los botones del Inicio ocupan todo el ancho; los textos de botón pueden partirse en dos líneas.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const BASE = [
+  ['Fondo', '#F5F5F8', '--bg', 'Fondo de todas las pantallas'],
+  ['Superficie', '#FFFFFF', '--surface', 'Tarjetas, campos, filas'],
+  ['Superficie 2', '#F0F0F6', '--surface-2', 'KPI, cabecera de tabla, deshabilitado'],
+  ['Tinta', '#16182C', '--ink', 'Títulos, texto, botón principal, panel oscuro'],
+  ['Tinta hover', '#2A2D4A', '--ink-hover', 'Hover del botón principal'],
+  ['Texto secundario', '#5C5F75', '--muted', 'Subtítulos, etiquetas, datos'],
+  ['Placeholder', '#6B6E83', '--placeholder', 'Texto de ejemplo en campos'],
+  ['Línea', '#E3E3EC', '--line', 'Bordes de tarjetas y divisores'],
+  ['Borde de campo', '#D6D6E2', '--field-line', 'Campos y botón secundario'],
+  ['Índigo', '#4436C7', '--accent-text', 'Enlaces, eyebrows, foco'],
+  ['Índigo suave', '#ECEBFA', '--accent-soft', 'Hover, avisos, anillo de foco'],
+  ['Lavanda', '#C9C3FF', '--highlight', 'KPI destacado, logo, realce'],
+  ['Texto sobre lavanda', '#2C2A55', '--on-highlight', 'Etiqueta sobre lavanda'],
+  ['Texto sobre tinta', '#B9BBD0', '--on-ink-muted', 'Texto secundario en panel oscuro'],
+];
+const ESTADOS = [
+  ['Verde', '#17734F', '--green', 'Pagado, ingreso, éxito'],
+  ['Verde suave', '#E3F4EC', '--green-soft', 'Fondo de éxito'],
+  ['Ámbar', '#8A5300', '--amber', 'Pendiente, advertencia'],
+  ['Ámbar suave', '#FDF0D9', '--amber-soft', 'Fondo de advertencia'],
+  ['Ámbar barra', '#D4891A', '--amber-bar', 'Barra al 80% del límite'],
+  ['Rojo', '#B42335', '--red', 'Gasto, error, excedido'],
+  ['Rojo suave', '#FDE8EB', '--red-soft', 'Fondo de error'],
+  ['Rojo borde', '#F2C4CB', '--red-line', 'Borde del botón Eliminar'],
+];
+function pintar(id, lista) {
+  document.getElementById(id).innerHTML = lista.map(([n, hex, tok, uso]) => `
+    <div class="sw"><div class="chip-color" style="background:${hex}"></div>
+      <div class="info"><span class="name">${n}</span><span class="token">${tok}</span><span class="use">${uso}</span>
+      <button class="hex" type="button" data-hex="${hex}" aria-label="Copiar ${hex}">${hex}</button></div></div>`).join('');
+}
+pintar('sw-base', BASE); pintar('sw-estados', ESTADOS);
+
+const ESP = [[4,'Entre píldoras del menú'],[6,'Label → campo'],[8,'Entre filtros y chips'],[10,'Entre filas de lista · logo → nombre'],[12,'Entre botones'],[14,'Entre campos · entre KPI'],[18,'Título de tarjeta → contenido'],[22,'Entre tarjetas · padding de botón'],[30,'Padding de tarjeta'],[48,'Margen lateral · alto de botón y campo'],[64,'Padding inferior de página']];
+document.getElementById('spacing').innerHTML = ESP.map(([v, d]) => `<div class="scale-row"><span class="lbl">${v} px</span><span class="bar" style="width:${v * 2}px"></span><span class="desc">${d}</span></div>`).join('');
+
+const toast = document.getElementById('toast'); let t;
+function avisar(msg) { toast.textContent = msg; toast.classList.add('show'); clearTimeout(t); t = setTimeout(() => toast.classList.remove('show'), 1600); }
+document.addEventListener('click', async (e) => {
+  const b = e.target.closest('button.hex'); if (!b) return;
+  try { await navigator.clipboard.writeText(b.dataset.hex); avisar(b.dataset.hex + ' copiado'); }
+  catch { const r = document.createRange(); r.selectNodeContents(b); const s = getSelection(); s.removeAllRanges(); s.addRange(r); avisar('Selecciona y copia con Ctrl+C'); }
+});
+</script>

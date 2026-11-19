@@ -151,18 +151,18 @@ function Pagos() {
             <section className="dark-card" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', gap: 16 }}>
                 <div style={{ flex: '1 1 280px' }}>
                     <p className="eyebrow">Resumen</p>
-                    <h3 style={{ color: '#fff', fontSize: 'clamp(1.2rem, 1rem + .8vw, 1.6rem)', margin: '0 0 8px' }}>
+                    <h2 style={{ color: 'var(--surface)', fontSize: 'clamp(1.2rem, 1rem + .8vw, 1.6rem)', margin: '0 0 8px' }}>
                         Resumen Financiero del Mes
-                    </h3>
-                    <small style={{ color: '#b9bbd0', display: 'block', fontSize: '.92rem' }}>
+                    </h2>
+                    <small style={{ color: 'var(--on-dark-muted)', display: 'block', fontSize: '.92rem' }}>
                         Información actualizada del presupuesto para tomar decisiones de pago sin calcular de memoria.
                     </small>
                 </div>
                 <p style={{ margin: 0, fontSize: '1rem', fontWeight: 600, maxWidth: 'none' }}>
-                    <strong style={{ display: 'block', color: '#b9bbd0', fontWeight: 600, fontSize: '.9rem' }}>Saldo disponible: </strong>
+                    <strong style={{ display: 'block', color: 'var(--on-dark-muted)', fontWeight: 600, fontSize: '.9rem' }}>Saldo disponible: </strong>
                     {saldoDisponible !== null ? (
                         <span style={{
-                            color: saldoDisponible >= 0 ? 'var(--highlight)' : '#ffb3bd',
+                            color: saldoDisponible >= 0 ? 'var(--highlight)' : 'var(--red-on-dark)',
                             fontWeight: 900,
                             fontSize: 'clamp(2rem, 1.4rem + 2.4vw, 3rem)',
                             letterSpacing: '-0.04em'

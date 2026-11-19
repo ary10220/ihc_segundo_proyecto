@@ -34,7 +34,7 @@
 .dashboard-logout {
     background: var(--surface);
     color: var(--ink);
-    border-color: #d6d6e2;
+    border-color: var(--border-input);
 }
 .dashboard-logout:hover:not(:disabled) {
     background: var(--surface-2) !important;
@@ -77,7 +77,7 @@
     font-weight: 600;
     color: var(--muted);
 }
-.resumen-item:last-child .resumen-item-etiqueta { color: #2c2a55; }
+.resumen-item:last-child .resumen-item-etiqueta { color: var(--label-destacado); }
 
 .resumen-item-valor {
     font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.2rem);
@@ -160,7 +160,7 @@
 }
 
 .estado-ok .progreso-barra { background: var(--green); }
-.estado-alerta .progreso-barra { background: #d4891a; }
+.estado-alerta .progreso-barra { background: var(--amber-barra); }
 .estado-excedido .progreso-barra { background: var(--red); }
 .estado-sin-limite .progreso-barra { background: var(--muted); opacity: .4; }
 
