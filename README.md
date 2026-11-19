@@ -16,7 +16,7 @@ Proyecto 2 de Interacción Humano-Computadora. Es un fork del proyecto de Marcos
 | Pruebas automatizadas y cobertura | [docs/pruebas-automatizadas.md](docs/pruebas-automatizadas.md) · [reporte de cobertura](docs/cobertura/backend/index.html) |
 | Accesibilidad (Lighthouse + axe + contraste AA) | [docs/accesibilidad/README.md](docs/accesibilidad/README.md) |
 | Video de la app | [presentacion_final/presupuesto.mp4](presentacion_final/presupuesto.mp4) |
-| Informe | [Carpeta del proyecto en Google Drive](https://drive.google.com/drive/folders/1USQtgiUW67l5txRU3K5dTD-CO7AmgFDq) |
+| Informe | [presentacion_final/Informe_Presupuesto_Estudiantil.docx](presentacion_final/Informe_Presupuesto_Estudiantil.docx) · también en la [carpeta de Drive](https://drive.google.com/drive/folders/1USQtgiUW67l5txRU3K5dTD-CO7AmgFDq) |
 | Diapositivas | [presentacion_final/Presupuesto Estudiantil.pptx](<presentacion_final/Presupuesto Estudiantil.pptx>) · también en la [carpeta de Drive](https://drive.google.com/drive/folders/1USQtgiUW67l5txRU3K5dTD-CO7AmgFDq) |
 | Evidencias por clase y tarea | [evidencias/](evidencias/) |
 
