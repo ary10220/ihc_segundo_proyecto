@@ -1,0 +1,83 @@
+{
+  "fecha": "2026-11-18T23:43:33.915Z",
+  "etapa": "despues",
+  "resumen": [
+    {
+      "pantalla": "inicio",
+      "ruta": "/",
+      "urlFinal": "http://127.0.0.1:5173/",
+      "puntaje": 100,
+      "fallas": []
+    },
+    {
+      "pantalla": "login",
+      "ruta": "/login",
+      "urlFinal": "http://127.0.0.1:5173/login",
+      "puntaje": 100,
+      "fallas": []
+    },
+    {
+      "pantalla": "registro",
+      "ruta": "/register",
+      "urlFinal": "http://127.0.0.1:5173/register",
+      "puntaje": 100,
+      "fallas": []
+    },
+    {
+      "pantalla": "recuperar-contrasena",
+      "ruta": "/forgot-password",
+      "urlFinal": "http://127.0.0.1:5173/forgot-password",
+      "puntaje": 100,
+      "fallas": []
+    },
+    {
+      "pantalla": "dashboard",
+      "ruta": "/dashboard",
+      "urlFinal": "http://127.0.0.1:5173/dashboard",
+      "puntaje": 100,
+      "fallas": []
+    },
+    {
+      "pantalla": "gastos",
+      "ruta": "/gastos",
+      "urlFinal": "http://127.0.0.1:5173/gastos",
+      "puntaje": 100,
+      "fallas": []
+    },
+    {
+      "pantalla": "pagos",
+      "ruta": "/pagos",
+      "urlFinal": "http://127.0.0.1:5173/pagos",
+      "puntaje": 100,
+      "fallas": []
+    },
+    {
+      "pantalla": "historial",
+      "ruta": "/historial",
+      "urlFinal": "http://127.0.0.1:5173/historial",
+      "puntaje": 100,
+      "fallas": []
+    },
+    {
+      "pantalla": "metas",
+      "ruta": "/metas",
+      "urlFinal": "http://127.0.0.1:5173/metas",
+      "puntaje": 100,
+      "fallas": []
+    },
+    {
+      "pantalla": "mis-datos",
+      "ruta": "/mis-datos",
+      "urlFinal": "http://127.0.0.1:5173/mis-datos",
+      "puntaje": 100,
+      "fallas": []
+    },
+    {
+      "pantalla": "analitica",
+      "ruta": "/analitica",
+      "urlFinal": "http://127.0.0.1:5173/analitica",
+      "puntaje": 100,
+      "fallas": []
+    }
+  ]
+}

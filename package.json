@@ -6,7 +6,8 @@
   "scripts": {
     "install:e2e:browser": "node e2e/run-playwright.mjs install chromium",
     "test:e2e": "node e2e/run-playwright.mjs test",
-    "test:e2e:headed": "node e2e/run-playwright.mjs test --headed"
+    "test:e2e:headed": "node e2e/run-playwright.mjs test --headed",
+    "a11y:lighthouse": "node e2e/lighthouse.mjs"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +24,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
     "@playwright/test": "^1.64.1",
-    "@types/node": "^26.6.6"
+    "@types/node": "^26.6.6",
+    "lighthouse": "^12.8.2"
   }
 }
