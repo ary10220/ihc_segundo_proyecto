@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "test": "jest"
+    "test": "jest",
+    "seed": "node seed.js",
+    "test:cobertura": "jest --coverage"
   },
   "keywords": [],
   "author": "",
@@ -24,5 +26,42 @@
   "devDependencies": {
     "jest": "^30.5.2",
     "nodemon": "^3.1.14"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "src/controllers/analiticaController.js",
+      "src/controllers/gastoRecurrenteController.js",
+      "src/controllers/metaController.js",
+      "src/controllers/misDatosController.js",
+      "src/controllers/presupuestoCategoriaController.js",
+      "src/services/gastoRecurrenteService.js",
+      "src/services/metaService.js",
+      "src/models/Evento.js",
+      "src/models/GastoRecurrente.js",
+      "src/models/Meta.js",
+      "src/models/MovimientoMeta.js",
+      "src/models/PresupuestoCategoria.js",
+      "src/routes/analiticaRoutes.js",
+      "src/routes/gastoRecurrenteRoutes.js",
+      "src/routes/metaRoutes.js",
+      "src/routes/misDatosRoutes.js",
+      "src/routes/presupuestoCategoriaRoutes.js"
+    ],
+    "coverageDirectory": "../docs/cobertura/backend",
+    "coverageReporters": [
+      "text",
+      "text-summary",
+      "html",
+      "json-summary"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "statements": 100,
+        "branches": 100,
+        "functions": 100,
+        "lines": 100
+      }
+    }
   }
 }

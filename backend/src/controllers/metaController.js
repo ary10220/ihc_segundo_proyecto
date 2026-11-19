@@ -20,11 +20,12 @@ function validarMonto(monto) {
 }
 
 // Solo el dueño puede ver o mover fondos de una meta: para otro usuario "no existe".
+// Siempre se llama dentro de una transacción y bloquea la fila hasta terminar.
 async function buscarMetaPropia(id, userId, transaction) {
     const meta = await Meta.findOne({
         where: { id: Number(id), userId },
         transaction,
-        lock: transaction ? transaction.LOCK.UPDATE : undefined
+        lock: transaction.LOCK.UPDATE
     });
     if (!meta) throw new ErrorNegocio(404, 'Meta no encontrada');
     return meta;
