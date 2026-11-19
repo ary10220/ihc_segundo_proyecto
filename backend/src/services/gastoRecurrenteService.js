@@ -71,6 +71,7 @@ async function crearOcurrencia(recurrencia, fechaProgramada, transaction) {
     const gastosMes = await Gasto.findAll({
         where: {
             userId: recurrencia.userId,
+            tipo: { [Op.ne]: 'ingreso' },
             fecha: { [Op.gte]: periodo.inicio, [Op.lt]: periodo.fin }
         },
         attributes: ['monto'],

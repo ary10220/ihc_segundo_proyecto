@@ -2,6 +2,9 @@ const Presupuesto = require('../models/Presupuesto');
 const Gasto = require('../models/Gasto');
 const { Op } = require('sequelize');
 
+// El presupuesto mide lo que se gasta: los ingresos no cuentan como "gastado".
+const SOLO_GASTOS = { [Op.ne]: 'ingreso' };
+
 async function establecerPresupuesto(req, res) {
     try {
         const { limite, mes, anio } = req.body;
@@ -28,6 +31,7 @@ async function establecerPresupuesto(req, res) {
         const gastos = await Gasto.findAll({
             where: {
                 userId,
+                tipo: SOLO_GASTOS,
                 fecha: {
                     [Op.gte]: inicioMes,
                     [Op.lt]: inicioMesSiguiente
@@ -114,6 +118,7 @@ async function obtenerPresupuesto(req, res) {
         const gastos = await Gasto.findAll({
             where: {
                 userId,
+                tipo: SOLO_GASTOS,
                 fecha: {
                     [Op.gte]: inicioMes,
                     [Op.lt]: inicioMesSiguiente

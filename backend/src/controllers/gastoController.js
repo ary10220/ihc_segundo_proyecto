@@ -3,6 +3,9 @@ const Presupuesto = require('../models/Presupuesto');
 const PresupuestoCategoria = require('../models/PresupuestoCategoria');
 const { Op } = require('sequelize');
 
+// El presupuesto mide lo que se gasta: los ingresos no cuentan como "gastado".
+const SOLO_GASTOS = { [Op.ne]: 'ingreso' };
+
 // Tarea 9 - Aviso antes de superar el limite de la categoria.
 // Si el gasto haria pasar el limite de su categoria en ese mes, devuelve
 // los datos del aviso (cuanto se pasaria) para pedir confirmacion.
@@ -94,6 +97,7 @@ async function registrarGasto(req, res) {
         const gastos = await Gasto.findAll({
             where: {
                 userId,
+                tipo: SOLO_GASTOS,
                 fecha: {
                     [Op.gte]: inicioMes,
                     [Op.lt]: inicioMesSiguiente
@@ -110,9 +114,11 @@ async function registrarGasto(req, res) {
 
         const limite = Number(presupuesto.limite);
         const disponible = Number((limite - gastado).toFixed(2));
+        const tipoNormalizado = tipo ? String(tipo).toLowerCase().trim() : 'gasto';
 
-        // Validar que el nuevo gasto no supere el saldo disponible
-        if (montoNumerico > disponible) {
+        // Validar que el nuevo gasto no supere el saldo disponible.
+        // Un ingreso no consume presupuesto, asi que no se compara con el limite.
+        if (tipoNormalizado !== 'ingreso' && montoNumerico > disponible) {
             return res.status(400).json({
                 error: 'El gasto supera el presupuesto mensual disponible',
                 limite: Number(limite.toFixed(2)),
@@ -122,7 +128,6 @@ async function registrarGasto(req, res) {
             });
         }
 
-        const tipoNormalizado = tipo ? String(tipo).toLowerCase().trim() : 'gasto';
         const categoriaNormalizada = categoria ? String(categoria).toLowerCase().trim() : 'otros';
 
         // Tarea 9: si supera el limite de la categoria, pedir confirmacion antes de guardar
@@ -264,6 +269,7 @@ async function editarGasto(req, res) {
             where: {
                 userId,
                 id: { [Op.ne]: gasto.id },
+                tipo: SOLO_GASTOS,
                 fecha: {
                     [Op.gte]: inicioMes,
                     [Op.lt]: inicioMesSiguiente
@@ -279,9 +285,10 @@ async function editarGasto(req, res) {
 
         const limite = Number(presupuesto.limite);
         const disponible = Number((limite - gastadoOtros).toFixed(2));
+        const tipoFinal = tipo ? String(tipo).toLowerCase().trim() : (gasto.tipo || 'gasto');
 
-        // Validar el nuevo monto sin contar dos veces el gasto original
-        if (montoNumerico > disponible) {
+        // Validar el nuevo monto sin contar dos veces el gasto original (los ingresos no consumen presupuesto)
+        if (tipoFinal !== 'ingreso' && montoNumerico > disponible) {
             return res.status(400).json({
                 error: 'La modificación supera el presupuesto mensual disponible',
                 limite: Number(limite.toFixed(2)),

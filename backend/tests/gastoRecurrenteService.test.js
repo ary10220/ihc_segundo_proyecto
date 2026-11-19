@@ -167,3 +167,20 @@ describe('gastoRecurrenteService · casos límite', () => {
         expect(siguienteFecha('2026-01-31', 'mensual')).toBe('2026-02-28');
     });
 });
+
+test('las recurrencias calculan el disponible del mes sin contar ingresos', async () => {
+    jest.clearAllMocks();
+    sequelize.transaction.mockImplementation((callback) => callback({ LOCK: { UPDATE: 'UPDATE' } }));
+    GastoRecurrente.findAll.mockResolvedValue([{
+        id: 9, userId: 9, monto: '20', motivo: 'Pasaje', categoria: 'transporte', frecuencia: 'semanal',
+        proximaFecha: fechaLocalHoy(), ultimoError: null, save: jest.fn()
+    }]);
+    Gasto.findOne.mockResolvedValue(null);
+    Presupuesto.findOne.mockResolvedValue({ limite: '100' });
+    Gasto.findAll.mockResolvedValue([]);
+    Gasto.create.mockResolvedValue({ id: 1 });
+
+    await procesarRecurrenciasVencidas(9);
+
+    expect(Gasto.findAll.mock.calls[0][0].where.tipo).toEqual({ [require('sequelize').Op.ne]: 'ingreso' });
+});
