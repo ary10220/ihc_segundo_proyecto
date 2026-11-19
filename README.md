@@ -98,12 +98,12 @@ Con PostgreSQL encendido. Las E2E levantan el backend y el frontend solas.
 # Desde la raíz
 pnpm install
 pnpm run install:e2e:browser   # una sola vez: descarga Chromium
-pnpm run test:e2e              # 45 pruebas E2E (incluye accesibilidad WCAG 2.1 AA)
+pnpm run test:e2e              # 46 pruebas E2E (incluye accesibilidad WCAG 2.1 AA)
 pnpm run a11y:lighthouse       # reporte Lighthouse de las 11 pantallas -> docs/accesibilidad/lighthouse/
 
 # Backend
 cd backend
-npm test                       # 137 pruebas unitarias
+npm test                       # 144 pruebas unitarias
 npm run test:cobertura         # + reporte en docs/cobertura/backend (exige 100 % del código del fork)
 ```
 

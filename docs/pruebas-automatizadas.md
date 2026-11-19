@@ -6,8 +6,8 @@ Dos suites: **E2E con Playwright** (la app completa en Chromium, contra el backe
 
 | Suite | Pruebas | Resultado |
 |---|---:|---|
-| E2E (Playwright, `e2e/`) | 45 | 45 pasan |
-| Unitarias (Jest, `backend/tests/`) | 137 | 137 pasan |
+| E2E (Playwright, `e2e/`) | 46 | 46 pasan |
+| Unitarias (Jest, `backend/tests/`) | 144 | 144 pasan |
 | Cobertura del código del backend que agregó el fork | 435 sentencias · 174 ramas · 48 funciones · 417 líneas | **100 % en las cuatro** |
 
 ## Cómo correrlas
@@ -32,6 +32,7 @@ npm run test:cobertura         # pruebas + reporte; falla si la cobertura baja d
 
 | Archivo | Flujo |
 |---|---|
+| `ingresos.spec.ts` | Un ingreso se registra aunque supere el disponible y no cuenta como «Gastado» en el Dashboard |
 | `presupuesto.spec.ts` | Registrar y pagar un gasto, rechazo por saldo, redirección sin sesión, gastos recurrentes semanales y mensuales por usuario |
 | `estado-gastos.spec.ts` | Filtros rápidos Pendientes / Pagados |
 | `aviso-limite.spec.ts` | Aviso al pasar el límite por categoría al crear y al editar |
