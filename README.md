@@ -11,14 +11,13 @@ Proyecto 2 de Interacción Humano-Computadora. Es un fork del proyecto de Marcos
 | Qué | Dónde |
 |---|---|
 | App en la nube | <https://presupuesto-estudiantil.vercel.app/> (API: <https://presupuesto-estudiantil.onrender.com>; la primera carga puede tardar unos segundos mientras Render despierta) |
-| Usuario de prueba | `demo@ihc.com` / `Demo1234` |
-| Sistema de diseño en Figma | [docs/figma/IHC.fig](docs/figma/IHC.fig): en Figma, *Archivo → Importar*. Páginas *1 Estilos*, *2 Componentes* y *3 Pantallas* |
+| Sistema de diseño en Figma | [presentacion_final/IHC.fig](presentacion_final/IHC.fig): en Figma, *Archivo → Importar*. Páginas *1 Estilos*, *2 Componentes* y *3 Pantallas* |
 | Tokens y tabla componente ↔ archivo | [docs/tokens-y-componentes.md](docs/tokens-y-componentes.md) · [guía de estilos](docs/guia-estilos-figma.html) |
 | Pruebas automatizadas y cobertura | [docs/pruebas-automatizadas.md](docs/pruebas-automatizadas.md) · [reporte de cobertura](docs/cobertura/backend/index.html) |
 | Accesibilidad (Lighthouse + axe + contraste AA) | [docs/accesibilidad/README.md](docs/accesibilidad/README.md) |
-| Video de la app | PENDIENTE |
-| Informe | PENDIENTE |
-| Diapositivas | PENDIENTE |
+| Video de la app | [presentacion_final/presupuesto.mp4](presentacion_final/presupuesto.mp4) |
+| Informe | [Carpeta del proyecto en Google Drive](https://drive.google.com/drive/folders/1USQtgiUW67l5txRU3K5dTD-CO7AmgFDq) |
+| Diapositivas | [presentacion_final/Presupuesto Estudiantil.pptx](<presentacion_final/Presupuesto Estudiantil.pptx>) · también en la [carpeta de Drive](https://drive.google.com/drive/folders/1USQtgiUW67l5txRU3K5dTD-CO7AmgFDq) |
 | Evidencias por clase y tarea | [evidencias/](evidencias/) |
 
 ## Qué hace
@@ -73,7 +72,7 @@ JWT_SECRET=cualquier_texto_largo_y_secreto
 
 ```bash
 npm install
-npm run seed     # crea el usuario de prueba demo@ihc.com / Demo1234
+npm run seed     # crea el usuario de prueba
 npm start        # http://localhost:4000
 ```
 
@@ -89,7 +88,7 @@ npm install
 npm run dev      # http://localhost:5173
 ```
 
-En local no hace falta `.env`: el frontend usa `http://localhost:4000` por defecto. Entra con `demo@ihc.com` / `Demo1234` o crea una cuenta desde «Crear cuenta».
+En local no hace falta `.env`: el frontend usa `http://localhost:4000` por defecto. Entra con el usuario de prueba o crea una cuenta desde «Crear cuenta».
 
 ## Pruebas
 
